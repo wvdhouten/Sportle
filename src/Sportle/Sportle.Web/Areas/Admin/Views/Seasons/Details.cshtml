@@ -1,0 +1,58 @@
+﻿@using Sportle.Web.Models.Formula1
+@model Sportle.Web.Models.Formula1.Season
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Season</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Year)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Year)
+        </dd>
+    </dl>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Drivers)
+        </dt>
+        <dd class="col-sm-10">
+            <table class="w-100">
+                @foreach (var d in Model.Drivers)
+                {
+                    <tr>
+                        <td>@d.Name</td>
+                        <td>@d.Country</td>
+                    </tr>
+                }
+            </table>
+        </dd>
+    </dl>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Events)
+        </dt>
+        <dd class="col-sm-10">
+            <table class="w-100">
+                @foreach (var e in Model.Events)
+                {
+                    <tr>
+                        <td>@e.Venue.Name</td>
+                        <td>@e.Venue.Country</td>
+                        <td>@(e.Sessions.FirstOrDefault(s => s.Type == SessionType.Race)?.Start.ToString("d MMMM") ?? "")</td>
+                    </tr>
+                }
+            </table>
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
