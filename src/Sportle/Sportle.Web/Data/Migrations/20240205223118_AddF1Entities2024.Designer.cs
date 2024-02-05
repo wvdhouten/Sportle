@@ -11,7 +11,7 @@ using Sportle.Web.Data;
 
 namespace Sportle.Web.Data.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(SportleDbContext))]
     [Migration("20240205223118_AddF1Entities2024")]
     partial class AddF1Entities2024
     {

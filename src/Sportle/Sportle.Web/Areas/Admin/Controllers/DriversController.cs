@@ -13,9 +13,9 @@ namespace Sportle.Web.Areas.Admin.Controllers
     [Area("Admin")]
     public class DriversController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly SportleDbContext _context;
 
-        public DriversController(ApplicationDbContext context)
+        public DriversController(SportleDbContext context)
         {
             _context = context;
         }

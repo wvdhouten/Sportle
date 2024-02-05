@@ -8,9 +8,9 @@ namespace Sportle.Web.Areas.Admin.Controllers
     [Area("Admin")]
     public class SeasonsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly SportleDbContext _context;
 
-        public SeasonsController(ApplicationDbContext context)
+        public SeasonsController(SportleDbContext context)
         {
             _context = context;
         }

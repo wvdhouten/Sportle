@@ -6,9 +6,9 @@ using System.Globalization;
 
 namespace Sportle.Web.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class SportleDbContext : IdentityDbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public SportleDbContext(DbContextOptions<SportleDbContext> options)
             : base(options)
         {
         }
@@ -25,6 +25,10 @@ namespace Sportle.Web.Data
         }
 
         public DbSet<Season> Seasons { get; set; }
+
+        public DbSet<EventPrediction2024> Predictions2024 { get; set; }
+
+        public DbSet<EventResult2024> Results2024 { get; set; }
 
         public DbSet<Driver> Drivers { get; set; }
 

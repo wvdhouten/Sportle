@@ -1,8 +1,32 @@
-﻿@{
+﻿@model DashboardViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    <h3>Next Event</h3>
+    @if (Model.NextEvent != null)
+    {
+        <div class="card text-center mb-3">
+            <div class="card-body">
+                <h5 class="card-title">@Model.NextEvent.Venue.Name (@Model.NextEvent.Venue.Country)</h5>
+                <p class="card-text">@Model.NextEvent.GetDateRange()</p>
+                <a asp-area="" asp-controller="Predictions" asp-action="Index" asp-route-eventId="@Model.NextEvent.Id" class="btn btn-primary">Predict</a>
+            </div>
+        </div>
+    }
+
+    <h3>All Events (2024)</h3>
+    @foreach (var e in Model.Events)
+    {
+        <div class="card text-center mb-3">
+            <div class="card-body">
+                <h5 class="card-title">@e.Venue.Name (@e.Venue.Country)</h5>
+                <p class="card-text">@e.GetDateRange()</p>
+                <a asp-area="" asp-controller="Predictions" asp-action="Index" asp-route-eventId="@e.Id" class="btn btn-primary">Predict</a>
+            </div>
+        </div>
+    }
 </div>

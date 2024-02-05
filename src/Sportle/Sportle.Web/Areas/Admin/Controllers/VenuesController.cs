@@ -13,9 +13,9 @@ namespace Sportle.Web.Areas.Admin.Controllers
     [Area("Admin")]
     public class VenuesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly SportleDbContext _context;
 
-        public VenuesController(ApplicationDbContext context)
+        public VenuesController(SportleDbContext context)
         {
             _context = context;
         }

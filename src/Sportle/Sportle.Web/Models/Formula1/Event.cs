@@ -7,9 +7,9 @@ namespace Sportle.Web.Models.Formula1
     {
         public Guid Id { get; set; }
 
-        public required Season Season { get; set; }
+        public Season Season { get; set; }
 
-        public required Venue Venue { get; set; }
+        public Venue Venue { get; set; }
 
         public List<Session> Sessions { get; set; } = [];
     }

@@ -10,7 +10,7 @@ using Sportle.Web.Data;
 
 namespace Sportle.Web.Data.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(SportleDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -275,6 +275,146 @@ namespace Sportle.Web.Data.Migrations
                     b.ToTable("Events");
                 });
 
+            modelBuilder.Entity("Sportle.Web.Models.Formula1.EventPrediction2024", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("EarlyBonus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PodiumBonus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PositionBonus")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("PredictedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("RaceFL")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RaceP1")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RaceP10")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RaceP2")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RaceP3")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RaceP4")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RaceP5")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RaceP6")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RaceP7")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RaceP8")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RaceP9")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RacePP")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("SprintBonus")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("SprintFL")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("SprintP1")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("SprintPP")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("UserId", "EventId");
+
+                    b.ToTable("Predictions2024");
+                });
+
+            modelBuilder.Entity("Sportle.Web.Models.Formula1.EventResult2024", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("PredictedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("RaceFL")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RaceP1")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RaceP10")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RaceP2")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RaceP3")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RaceP4")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RaceP5")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RaceP6")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RaceP7")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RaceP8")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RaceP9")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RacePP")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("SprintFL")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("SprintP1")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("SprintPP")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("Results2024");
+                });
+
             modelBuilder.Entity("Sportle.Web.Models.Formula1.Season", b =>
                 {
                     b.Property<Guid>("Id")
@@ -405,6 +545,17 @@ namespace Sportle.Web.Data.Migrations
                     b.Navigation("Season");
 
                     b.Navigation("Venue");
+                });
+
+            modelBuilder.Entity("Sportle.Web.Models.Formula1.EventResult2024", b =>
+                {
+                    b.HasOne("Sportle.Web.Models.Formula1.Event", "Event")
+                        .WithMany()
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
                 });
 
             modelBuilder.Entity("Sportle.Web.Models.Formula1.Session", b =>

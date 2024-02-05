@@ -1,14 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Sportle.Web.Models.Formula1
 {
-    [PrimaryKey(nameof(User), nameof(Event))]
+    [PrimaryKey(nameof(UserId), nameof(EventId))]
     public class EventPrediction2024
     {
-        public required IdentityUser User { get; set; }
+        public required Guid UserId { get; set; }
 
-        public required Event Event { get; set; }
+        public required Guid EventId { get; set; }
 
         public DateTime PredictedOn { get; set; }
 
