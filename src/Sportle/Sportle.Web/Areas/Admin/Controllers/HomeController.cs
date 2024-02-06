@@ -1,11 +1,11 @@
 namespace Sportle.Web.Areas.Admin.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using Sportle.Web.Controllers;
-    using Sportle.Web.Data;
 
-    [Area("Admin")]
+    [Area("Admin"), Authorize(Roles = "Admin")]
     public class HomeController : SportleBaseController
     {
         private readonly ILogger<HomeController> _logger;

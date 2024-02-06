@@ -1,0 +1,143 @@
+﻿@model Sportle.Web.Models.Formula1.EventPrediction2024
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>EventPrediction2024</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="UserId" class="control-label"></label>
+                <input asp-for="UserId" class="form-control" />
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EventId" class="control-label"></label>
+                <input asp-for="EventId" class="form-control" />
+                <span asp-validation-for="EventId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PredictedOn" class="control-label"></label>
+                <input asp-for="PredictedOn" class="form-control" />
+                <span asp-validation-for="PredictedOn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SprintPP" class="control-label"></label>
+                <input asp-for="SprintPP" class="form-control" />
+                <span asp-validation-for="SprintPP" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SprintP1" class="control-label"></label>
+                <input asp-for="SprintP1" class="form-control" />
+                <span asp-validation-for="SprintP1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SprintFL" class="control-label"></label>
+                <input asp-for="SprintFL" class="form-control" />
+                <span asp-validation-for="SprintFL" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RacePP" class="control-label"></label>
+                <input asp-for="RacePP" class="form-control" />
+                <span asp-validation-for="RacePP" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RaceP1" class="control-label"></label>
+                <input asp-for="RaceP1" class="form-control" />
+                <span asp-validation-for="RaceP1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RaceP2" class="control-label"></label>
+                <input asp-for="RaceP2" class="form-control" />
+                <span asp-validation-for="RaceP2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RaceP3" class="control-label"></label>
+                <input asp-for="RaceP3" class="form-control" />
+                <span asp-validation-for="RaceP3" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RaceP4" class="control-label"></label>
+                <input asp-for="RaceP4" class="form-control" />
+                <span asp-validation-for="RaceP4" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RaceP5" class="control-label"></label>
+                <input asp-for="RaceP5" class="form-control" />
+                <span asp-validation-for="RaceP5" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RaceP6" class="control-label"></label>
+                <input asp-for="RaceP6" class="form-control" />
+                <span asp-validation-for="RaceP6" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RaceP7" class="control-label"></label>
+                <input asp-for="RaceP7" class="form-control" />
+                <span asp-validation-for="RaceP7" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RaceP8" class="control-label"></label>
+                <input asp-for="RaceP8" class="form-control" />
+                <span asp-validation-for="RaceP8" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RaceP9" class="control-label"></label>
+                <input asp-for="RaceP9" class="form-control" />
+                <span asp-validation-for="RaceP9" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RaceP10" class="control-label"></label>
+                <input asp-for="RaceP10" class="form-control" />
+                <span asp-validation-for="RaceP10" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RaceFL" class="control-label"></label>
+                <input asp-for="RaceFL" class="form-control" />
+                <span asp-validation-for="RaceFL" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Points" class="control-label"></label>
+                <input asp-for="Points" class="form-control" />
+                <span asp-validation-for="Points" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EarlyBonus" class="control-label"></label>
+                <input asp-for="EarlyBonus" class="form-control" />
+                <span asp-validation-for="EarlyBonus" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SprintBonus" class="control-label"></label>
+                <input asp-for="SprintBonus" class="form-control" />
+                <span asp-validation-for="SprintBonus" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PositionBonus" class="control-label"></label>
+                <input asp-for="PositionBonus" class="form-control" />
+                <span asp-validation-for="PositionBonus" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PodiumBonus" class="control-label"></label>
+                <input asp-for="PodiumBonus" class="form-control" />
+                <span asp-validation-for="PodiumBonus" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

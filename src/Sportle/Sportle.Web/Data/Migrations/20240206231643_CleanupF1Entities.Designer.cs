@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sportle.Web.Data;
 
@@ -11,9 +12,11 @@ using Sportle.Web.Data;
 namespace Sportle.Web.Data.Migrations
 {
     [DbContext(typeof(SportleDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240206231643_CleanupF1Entities")]
+    partial class CleanupF1Entities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -260,7 +263,7 @@ namespace Sportle.Web.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("SeasonId")
+                    b.Property<Guid?>("SeasonId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("VenueId")
@@ -410,8 +413,6 @@ namespace Sportle.Web.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EventId");
-
                     b.ToTable("Results2024");
                 });
 
@@ -530,11 +531,9 @@ namespace Sportle.Web.Data.Migrations
 
             modelBuilder.Entity("Sportle.Web.Models.Formula1.Event", b =>
                 {
-                    b.HasOne("Sportle.Web.Models.Formula1.Season", "Season")
+                    b.HasOne("Sportle.Web.Models.Formula1.Season", null)
                         .WithMany("Events")
-                        .HasForeignKey("SeasonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SeasonId");
 
                     b.HasOne("Sportle.Web.Models.Formula1.Venue", "Venue")
                         .WithMany()
@@ -542,20 +541,7 @@ namespace Sportle.Web.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Season");
-
                     b.Navigation("Venue");
-                });
-
-            modelBuilder.Entity("Sportle.Web.Models.Formula1.EventResult2024", b =>
-                {
-                    b.HasOne("Sportle.Web.Models.Formula1.Event", "Event")
-                        .WithMany()
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Event");
                 });
 
             modelBuilder.Entity("Sportle.Web.Models.Formula1.Session", b =>

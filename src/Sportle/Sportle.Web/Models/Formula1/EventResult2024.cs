@@ -4,7 +4,7 @@
     {
         public Guid Id { get; set; }
 
-        public required Event Event { get; set; }
+        public Guid EventId { get; set; }
 
         public DateTime PredictedOn { get; set; }
 

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Sportle.Web.Models.Formula1.EventPrediction2024>
+﻿@model IEnumerable<Sportle.Web.Models.Formula1.EventResult2024>
 
 @{
     ViewData["Title"] = "Index";
@@ -12,6 +12,9 @@
 <table class="table">
     <thead>
         <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.EventId)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.PredictedOn)
             </th>
@@ -60,27 +63,15 @@
             <th>
                 @Html.DisplayNameFor(model => model.RaceFL)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Points)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EarlyBonus)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SprintBonus)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PositionBonus)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PodiumBonus)
-            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.EventId)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.PredictedOn)
             </td>
@@ -130,24 +121,9 @@
                 @Html.DisplayFor(modelItem => item.RaceFL)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Points)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EarlyBonus)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SprintBonus)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PositionBonus)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PodiumBonus)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }
