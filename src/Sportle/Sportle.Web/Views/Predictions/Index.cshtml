@@ -1,155 +1,172 @@
-﻿@model IEnumerable<Sportle.Web.Models.Formula1.EventPrediction2024>
+﻿@model Sportle.Web.Models.PredictionViewModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Edit";
+
+    var e = ViewData["Event"] as Event;
+    var hasSprint = e?.Sessions.Any(s => s.Type == SessionType.Sprint) ?? false;
+
+    var drivers = ViewData["Drivers"] as IList<Driver> ?? new List<Driver>();
+    var driverOptions = drivers.Select(d => new SelectListItem { Text = $"{d.Name} ({d.Number})", Value = d.Id.ToString() });
+
+    Func<SelectListItem, Guid?, SelectListItem> DriverOptionsWithSelected = new Func<SelectListItem, Guid?, SelectListItem>((d, s) => {
+        return new SelectListItem { Text = d.Text, Value = d.Value, Selected = d.Value == s?.ToString() };
+    });
 }
 
-<h1>Index</h1>
+<h1>@e?.Venue.Name (@e?.Venue.Country)</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.PredictedOn)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SprintPP)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SprintP1)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SprintFL)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RacePP)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RaceP1)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RaceP2)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RaceP3)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RaceP4)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RaceP5)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RaceP6)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RaceP7)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RaceP8)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RaceP9)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RaceP10)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RaceFL)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Points)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EarlyBonus)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SprintBonus)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PositionBonus)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PodiumBonus)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.PredictedOn)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SprintPP)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SprintP1)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SprintFL)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RacePP)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RaceP1)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RaceP2)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RaceP3)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RaceP4)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RaceP5)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RaceP6)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RaceP7)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RaceP8)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RaceP9)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RaceP10)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RaceFL)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Points)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EarlyBonus)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SprintBonus)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PositionBonus)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PodiumBonus)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
+<h4>@e?.GetDateRange()</h4>
+<hr />
+<div class="row">
+    <form asp-action="Index">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Prediction.UserId" />
+        <input type="hidden" asp-for="Prediction.EventId" />
+        <div class="card mb-3" condition="hasSprint">
+            <div class="card-header">Sprint</div>
+            <div class="card-body">
+                <div class="row mb-2">
+                    <label asp-for="Prediction.SprintPP" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-9">
+                        <select asp-for="Prediction.SprintPP" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.Prediction.SprintPP))" class="form-control">
+                            <option value="">Select...</option>
+                        </select>
+                    </div>
+                </div>
+                <hr />
+                <div class="row mb-2">
+                    <label asp-for="Prediction.SprintP1" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-9">
+                        <select asp-for="Prediction.SprintP1" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.Prediction.SprintP1))" class="form-control">
+                            <option value="">Select...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <label asp-for="Prediction.SprintFL" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-9">
+                        <select asp-for="Prediction.SprintFL" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.Prediction.SprintFL))" class="form-control">
+                            <option value="">Select...</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card mb-3">
+            <div class="card-header">Race</div>
+            <div class="card-body">
+                <div class="row mb-2">
+                    <label asp-for="Prediction.RacePP" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-9">
+                        <select asp-for="Prediction.RacePP" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.Prediction.RacePP))" class="form-control">
+                            <option value="">Select...</option>
+                        </select>
+                    </div>
+                </div>
+                <hr />
+                <div class="row mb-2">
+                    <label asp-for="Prediction.RaceP1" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-9">
+                        <select asp-for="Prediction.RaceP1" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.Prediction.RaceP1))" class="form-control">
+                            <option value="">Select...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label asp-for="Prediction.RaceP2" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-9">
+                        <select asp-for="Prediction.RaceP2" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.Prediction.RaceP2))" class="form-control">
+                            <option value="">Select...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label asp-for="Prediction.RaceP3" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-9">
+                        <select asp-for="Prediction.RaceP3" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.Prediction.RaceP3))" class="form-control">
+                            <option value="">Select...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label asp-for="Prediction.RaceP4" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-9">
+                        <select asp-for="Prediction.RaceP4" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.Prediction.RaceP4))" class="form-control">
+                            <option value="">Select...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label asp-for="Prediction.RaceP5" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-9">
+                        <select asp-for="Prediction.RaceP5" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.Prediction.RaceP5))" class="form-control">
+                            <option value="">Select...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label asp-for="Prediction.RaceP6" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-9">
+                        <select asp-for="Prediction.RaceP6" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.Prediction.RaceP6))" class="form-control">
+                            <option value="">Select...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label asp-for="Prediction.RaceP7" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-9">
+                        <select asp-for="Prediction.RaceP7" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.Prediction.RaceP7))" class="form-control">
+                            <option value="">Select...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label asp-for="Prediction.RaceP8" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-9">
+                        <select asp-for="Prediction.RaceP8" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.Prediction.RaceP8))" class="form-control">
+                            <option value="">Select...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label asp-for="Prediction.RaceP9" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-9">
+                        <select asp-for="Prediction.RaceP9" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.Prediction.RaceP9))" class="form-control">
+                            <option value="">Select...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label asp-for="Prediction.RaceP10" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-9">
+                        <select asp-for="Prediction.RaceP10" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.Prediction.RaceP10))" class="form-control">
+                            <option value="">Select...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label asp-for="Prediction.RaceFL" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-9">
+                        <select asp-for="Prediction.RaceFL" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.Prediction.RaceFL))" class="form-control">
+                            <option value="">Select...</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
-    </tbody>
-</table>

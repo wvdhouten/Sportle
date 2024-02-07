@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Sportle.Web.Data;
 using Sportle.Web.Models;
@@ -14,6 +15,18 @@ namespace Sportle.Web.Controllers
         {
             _context = context;
             _logger = logger;
+        }
+
+        public async Task<IActionResult> Repair([FromServices] RoleManager<IdentityRole> roleManager, [FromServices] UserManager<IdentityUser> userManager)
+        {
+            if (!roleManager.Roles.Any())
+                await roleManager.CreateAsync(new IdentityRole("Admin"));
+
+            var firstUser = userManager.Users.FirstOrDefault();
+            if (firstUser is not null)
+                await userManager.AddToRoleAsync(firstUser, "Admin").ConfigureAwait(false);
+
+            return RedirectToAction("Index", "Home");
         }
 
         public IActionResult Index()

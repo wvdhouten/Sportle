@@ -24,6 +24,8 @@ namespace Sportle.Web.Data
 
         public DbSet<Season> Seasons { get; set; }
 
+        public DbSet<Event> Events { get; set; }
+
         public DbSet<EventPrediction2024> Predictions2024 { get; set; }
 
         public DbSet<EventResult2024> Results2024 { get; set; }

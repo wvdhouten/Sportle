@@ -1,12 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Sportle.Web.Data;
+using Sportle.Web.Models;
 using Sportle.Web.Models.Formula1;
+using System.Security.Claims;
 
 namespace Sportle.Web.Controllers
 {
     [Authorize]
+    [Route("Predictions")]
     public class PredictionsController : Controller
     {
         private readonly SportleDbContext _context;
@@ -16,93 +20,63 @@ namespace Sportle.Web.Controllers
             _context = context;
         }
 
-        // GET: Predictions
-        public async Task<IActionResult> Index()
+        [Route("{eventId}")]
+        public async Task<IActionResult> Index(Guid? eventId)
         {
-            return View(await _context.Predictions2024.ToListAsync());
-        }
+            if (eventId is null)
+                return NotFound();
 
-        // GET: Predictions/Details/5
-        public async Task<IActionResult> Details(Guid? id)
-        {
-            if (id == null)
+            var @event = _context.Events.FirstOrDefault(e => e.Id == eventId);
+            if (@event is null)
+                return NotFound();
+
+            if (!Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId))
+                return NotFound();
+
+            var prediction = await _context.Predictions2024.FirstOrDefaultAsync(p => p.EventId == eventId && p.UserId == userId) ?? new EventPrediction2024 { EventId = eventId.Value, UserId = userId };
+            if (prediction == null)
             {
                 return NotFound();
             }
 
-            var eventPrediction2024 = await _context.Predictions2024
-                .FirstOrDefaultAsync(m => m.UserId == id);
-            if (eventPrediction2024 == null)
-            {
-                return NotFound();
-            }
+            var drivers = _context.Drivers.ToList();
 
-            return View(eventPrediction2024);
+            ViewData["Event"] = @event;
+            ViewData["Drivers"] = drivers;
+            var model = new PredictionViewModel { Prediction =  prediction };
+
+            return View(model);
         }
 
-        // GET: Predictions/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Predictions/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("{eventId}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserId,EventId,PredictedOn,SprintPP,SprintP1,SprintFL,RacePP,RaceP1,RaceP2,RaceP3,RaceP4,RaceP5,RaceP6,RaceP7,RaceP8,RaceP9,RaceP10,RaceFL,Points,EarlyBonus,SprintBonus,PositionBonus,PodiumBonus")] EventPrediction2024 eventPrediction2024)
+        public async Task<IActionResult> Index(Guid? eventId, PredictionViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                eventPrediction2024.UserId = Guid.NewGuid();
-                _context.Add(eventPrediction2024);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(eventPrediction2024);
-        }
-
-        // GET: Predictions/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
-        {
-            if (id == null)
-            {
+            if (eventId is null)
                 return NotFound();
-            }
 
-            var eventPrediction2024 = await _context.Predictions2024.FindAsync(id);
-            if (eventPrediction2024 == null)
-            {
+            var @event = _context.Events.FirstOrDefault(e => e.Id == eventId);
+            if (@event is null)
                 return NotFound();
-            }
-            return View(eventPrediction2024);
-        }
 
-        // POST: Predictions/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("UserId,EventId,PredictedOn,SprintPP,SprintP1,SprintFL,RacePP,RaceP1,RaceP2,RaceP3,RaceP4,RaceP5,RaceP6,RaceP7,RaceP8,RaceP9,RaceP10,RaceFL,Points,EarlyBonus,SprintBonus,PositionBonus,PodiumBonus")] EventPrediction2024 eventPrediction2024)
-        {
-            if (id != eventPrediction2024.UserId)
-            {
+            if (!Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId))
                 return NotFound();
-            }
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(eventPrediction2024);
+                    model.Prediction.PredictedOn = DateTime.UtcNow;
+
+                    _context.Update(model.Prediction);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EventPrediction2024Exists(eventPrediction2024.UserId))
+                    if (!_context.Predictions2024.Any(p => p.EventId ==eventId && p.UserId == userId))
                     {
-                        return NotFound();
+                        _context.Add(model.Prediction);
+                        await _context.SaveChangesAsync();
                     }
                     else
                     {
@@ -111,45 +85,13 @@ namespace Sportle.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(eventPrediction2024);
-        }
 
-        // GET: Predictions/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var drivers = _context.Drivers.ToList();
 
-            var eventPrediction2024 = await _context.Predictions2024
-                .FirstOrDefaultAsync(m => m.UserId == id);
-            if (eventPrediction2024 == null)
-            {
-                return NotFound();
-            }
+            ViewData["Event"] = @event;
+            ViewData["Drivers"] = drivers;
 
-            return View(eventPrediction2024);
-        }
-
-        // POST: Predictions/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
-        {
-            var eventPrediction2024 = await _context.Predictions2024.FindAsync(id);
-            if (eventPrediction2024 != null)
-            {
-                _context.Predictions2024.Remove(eventPrediction2024);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool EventPrediction2024Exists(Guid id)
-        {
-            return _context.Predictions2024.Any(e => e.UserId == id);
+            return View(model);
         }
     }
 }
