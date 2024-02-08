@@ -1,25 +1,22 @@
 ﻿@model IEnumerable<Sportle.Web.Models.Formula1.Driver>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Drivers";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<h1>Drivers</h1>
+<p><a asp-action="Create">Add New</a> | <a asp-controller="Home" asp-action="Index">Back to Dashboard</a></p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Number)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Country)
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Team)
             </th>
             <th></th>
         </tr>
@@ -29,18 +26,18 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.Number)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Country)
+                    <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Team)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id" title="Edit">✏️</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" title="Delete">🗑️</a>
                 </td>
             </tr>
         }

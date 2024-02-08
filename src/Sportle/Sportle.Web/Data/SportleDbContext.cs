@@ -45,6 +45,7 @@ namespace Sportle.Web.Data
                 SeedVenues();
                 SeedDrivers();
 
+                SeedSeasonDrivers();
                 SeedEvents();
 
                 SaveChanges();
@@ -115,6 +116,19 @@ namespace Sportle.Web.Data
             Drivers.Add(new Driver { Name = "Zhou Guanyu", Country = "China", Number = 24, Team = "Sauber" });
             Drivers.Add(new Driver { Name = "Daniel Ricciardo", Country = "Australia", Number = 3, Team = "VCARB" });
             Drivers.Add(new Driver { Name = "Yuki Tsunoda", Country = "Japan", Number = 22, Team = "VCARB" });
+        }
+
+        private void SeedSeasonDrivers()
+        {
+            var season = Seasons.FirstOrDefault(s => s.Year == 2024);
+
+            if (season == null || season.Drivers.Count > 0)
+                return;
+
+            foreach (var driver in Drivers)
+            {
+                season.Drivers.Add(driver);
+            }
         }
 
         private void SeedEvents()

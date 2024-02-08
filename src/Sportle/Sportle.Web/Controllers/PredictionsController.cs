@@ -1,17 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Sportle.Web.Data;
 using Sportle.Web.Extensions;
-using Sportle.Web.Models;
 using Sportle.Web.Models.Formula1;
 using System.Security.Claims;
 
 namespace Sportle.Web.Controllers
 {
     [Authorize]
-    [Route("Predictions")]
     public class PredictionsController : Controller
     {
         private readonly SportleDbContext _context;
@@ -21,24 +18,19 @@ namespace Sportle.Web.Controllers
             _context = context;
         }
 
-        [Route("{eventId}")]
-        public async Task<IActionResult> Index(Guid? eventId)
+        public async Task<IActionResult> Index(Guid? id)
         {
-            if (eventId is null)
+            if (id is null)
                 return NotFound();
 
-            var @event = _context.Events.FirstOrDefault(e => e.Id == eventId);
+            var @event = _context.Events.FirstOrDefault(e => e.Id == id);
             if (@event is null)
                 return NotFound();
 
             if (!Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId))
                 return NotFound();
 
-            var prediction = await _context.Predictions2024.FirstOrDefaultAsync(p => p.EventId == eventId && p.UserId == userId) ?? new EventPrediction2024 { EventId = eventId.Value, UserId = userId };
-            if (prediction == null)
-            {
-                return NotFound();
-            }
+            var prediction = await _context.Predictions2024.FirstOrDefaultAsync(p => p.EventId == id && p.UserId == userId) ?? new EventPrediction2024 { EventId = id.Value, UserId = userId };
 
             var drivers = _context.Drivers.ToList();
 
@@ -48,14 +40,14 @@ namespace Sportle.Web.Controllers
             return View(prediction);
         }
 
-        [HttpPost("{eventId}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(Guid? eventId, EventPrediction2024 model)
+        public async Task<IActionResult> Index(Guid? id, EventPrediction2024 model)
         {
-            if (eventId is null)
+            if (id is null)
                 return NotFound();
 
-            var @event = _context.Events.FirstOrDefault(e => e.Id == eventId);
+            var @event = _context.Events.FirstOrDefault(e => e.Id == id);
             if (@event is null)
                 return NotFound();
 
@@ -75,7 +67,7 @@ namespace Sportle.Web.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_context.Predictions2024.Any(p => p.EventId == eventId && p.UserId == userId))
+                    if (!_context.Predictions2024.Any(p => p.EventId == id && p.UserId == userId))
                     {
                         _context.Add(model);
                         await _context.SaveChangesAsync();
@@ -194,7 +186,7 @@ namespace Sportle.Web.Controllers
                 prediction.RaceP10
             };
 
-            var duplicates = predictions.Select(p => p is not null).GroupBy(p => p).Where(g => g.Count() > 1);
+            var duplicates = predictions.Where(p => p is not null).GroupBy(p => p).Where(g => g.Count() > 1);
             if (duplicates.Any())
                 ModelState.AddModelError("", "P1 - P10 must all have a unique driver.");
         }

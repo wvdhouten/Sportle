@@ -1,104 +1,163 @@
 ﻿@model Sportle.Web.Models.Formula1.EventResult2024
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Results";
+
+    var e = ViewData["Event"] as Event;
+    var hasSprint = e?.Sessions.Any(s => s.Type == SessionType.Sprint) ?? false;
+
+    var drivers = ViewData["Drivers"] as IList<Driver> ?? new List<Driver>();
+    var driverOptions = drivers.OrderBy(d => d.Name).Select(d => new SelectListItem { Text = $"{d.Name} ({d.Number})", Value = d.Id.ToString() });
+
+    Func<SelectListItem, Guid?, SelectListItem> DriverOptionsWithSelected = new Func<SelectListItem, Guid?, SelectListItem>((d, s) =>
+    {
+        return new SelectListItem { Text = d.Text, Value = d.Value, Selected = d.Value == s?.ToString() };
+    });
 }
 
-<h1>Edit</h1>
-
-<h4>EventResult2024</h4>
+<h1>@e?.Venue.Name (@e?.Venue.Country)</h1>
+<h4>@e?.GetDateRange()</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="EventId" class="control-label"></label>
-                <input asp-for="EventId" class="form-control" />
-                <span asp-validation-for="EventId" class="text-danger"></span>
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input type="hidden" asp-for="EventId" />
+            <div class="card mb-3" condition="hasSprint">
+                <div class="card-header">Sprint</div>
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <label asp-for="SprintPP" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <select asp-for="SprintPP" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.SprintPP))" class="form-control">
+                                <option value="">Select...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row mb-2">
+                        <label asp-for="SprintP1" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <select asp-for="SprintP1" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.SprintP1))" class="form-control">
+                                <option value="">Select...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label asp-for="SprintFL" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <select asp-for="SprintFL" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.SprintFL))" class="form-control">
+                                <option value="">Select...</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="PredictedOn" class="control-label"></label>
-                <input asp-for="PredictedOn" class="form-control" />
-                <span asp-validation-for="PredictedOn" class="text-danger"></span>
+            <div class="card mb-3">
+                <div class="card-header">Race</div>
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <label asp-for="RacePP" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <select asp-for="RacePP" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RacePP))" class="form-control">
+                                <option value="">Select...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row mb-2">
+                        <label asp-for="RaceP1" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <select asp-for="RaceP1" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceP1))" class="form-control">
+                                <option value="">Select...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label asp-for="RaceP2" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <select asp-for="RaceP2" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceP2))" class="form-control">
+                                <option value="">Select...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label asp-for="RaceP3" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <select asp-for="RaceP3" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceP3))" class="form-control">
+                                <option value="">Select...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row mb-2">
+                        <label asp-for="RaceP4" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <select asp-for="RaceP4" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceP4))" class="form-control">
+                                <option value="">Select...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label asp-for="RaceP5" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <select asp-for="RaceP5" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceP5))" class="form-control">
+                                <option value="">Select...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label asp-for="RaceP6" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <select asp-for="RaceP6" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceP6))" class="form-control">
+                                <option value="">Select...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label asp-for="RaceP7" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <select asp-for="RaceP7" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceP7))" class="form-control">
+                                <option value="">Select...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label asp-for="RaceP8" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <select asp-for="RaceP8" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceP8))" class="form-control">
+                                <option value="">Select...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label asp-for="RaceP9" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <select asp-for="RaceP9" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceP9))" class="form-control">
+                                <option value="">Select...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label asp-for="RaceP10" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <select asp-for="RaceP10" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceP10))" class="form-control">
+                                <option value="">Select...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label asp-for="RaceFL" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <select asp-for="RaceFL" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceFL))" class="form-control">
+                                <option value="">Select...</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="SprintPP" class="control-label"></label>
-                <input asp-for="SprintPP" class="form-control" />
-                <span asp-validation-for="SprintPP" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SprintP1" class="control-label"></label>
-                <input asp-for="SprintP1" class="form-control" />
-                <span asp-validation-for="SprintP1" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SprintFL" class="control-label"></label>
-                <input asp-for="SprintFL" class="form-control" />
-                <span asp-validation-for="SprintFL" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RacePP" class="control-label"></label>
-                <input asp-for="RacePP" class="form-control" />
-                <span asp-validation-for="RacePP" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RaceP1" class="control-label"></label>
-                <input asp-for="RaceP1" class="form-control" />
-                <span asp-validation-for="RaceP1" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RaceP2" class="control-label"></label>
-                <input asp-for="RaceP2" class="form-control" />
-                <span asp-validation-for="RaceP2" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RaceP3" class="control-label"></label>
-                <input asp-for="RaceP3" class="form-control" />
-                <span asp-validation-for="RaceP3" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RaceP4" class="control-label"></label>
-                <input asp-for="RaceP4" class="form-control" />
-                <span asp-validation-for="RaceP4" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RaceP5" class="control-label"></label>
-                <input asp-for="RaceP5" class="form-control" />
-                <span asp-validation-for="RaceP5" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RaceP6" class="control-label"></label>
-                <input asp-for="RaceP6" class="form-control" />
-                <span asp-validation-for="RaceP6" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RaceP7" class="control-label"></label>
-                <input asp-for="RaceP7" class="form-control" />
-                <span asp-validation-for="RaceP7" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RaceP8" class="control-label"></label>
-                <input asp-for="RaceP8" class="form-control" />
-                <span asp-validation-for="RaceP8" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RaceP9" class="control-label"></label>
-                <input asp-for="RaceP9" class="form-control" />
-                <span asp-validation-for="RaceP9" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RaceP10" class="control-label"></label>
-                <input asp-for="RaceP10" class="form-control" />
-                <span asp-validation-for="RaceP10" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RaceFL" class="control-label"></label>
-                <input asp-for="RaceFL" class="form-control" />
-                <span asp-validation-for="RaceFL" class="text-danger"></span>
-            </div>
-            <div class="form-group">
+            <div class="mb-3 text-end">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>

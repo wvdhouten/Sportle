@@ -1,48 +1,44 @@
-﻿@using Sportle.Web.Models.Formula1
-@model Sportle.Web.Models.Formula1.Season
+﻿@model Sportle.Web.Models.Formula1.Season
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Season Details";
 }
 
-<h1>Details</h1>
-
+<h1>@Model.Year</h1>
+<h4>Season Details</h4>
+<hr />
 <div>
-    <h4>Season</h4>
-    <hr />
     <dl class="row">
-        <dt class="col-sm-2">
+        <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.Year)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-9">
             @Html.DisplayFor(model => model.Year)
         </dd>
-    </dl>
-    <dl class="row">
-        <dt class="col-sm-2">
+        <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.Drivers)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-9">
             <table class="w-100">
                 @foreach (var d in Model.Drivers)
                 {
                     <tr>
+                        <td>@d.Number</td>
                         <td>@d.Name</td>
                         <td>@d.Country</td>
                     </tr>
                 }
             </table>
         </dd>
-    </dl>
-    <dl class="row">
-        <dt class="col-sm-2">
+        <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.Events)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-9">
             <table class="w-100">
                 @foreach (var e in Model.Events)
                 {
                     <tr>
+                        <td><a asp-area="Admin" asp-controller="Results" asp-action="Edit" asp-route-id="@e.Id">🏁</a></td>
                         <td>@e.Venue.Name</td>
                         <td>@e.Venue.Country</td>
                         <td>@(e.Sessions.FirstOrDefault(s => s.Type == SessionType.Race)?.Start.ToString("d MMMM") ?? "")</td>

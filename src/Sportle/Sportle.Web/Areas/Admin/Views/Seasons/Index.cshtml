@@ -1,14 +1,11 @@
 ﻿@model IEnumerable<Sportle.Web.Models.Formula1.Season>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Seasons";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<h1>Seasons</h1>
+<p><a asp-action="Create">Add New</a> | <a asp-controller="Home" asp-action="Index">Back to Dashboard</a></p>
 <table class="table">
     <thead>
         <tr>
@@ -23,11 +20,11 @@
         {
             <tr>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Year)</a>
+                    <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Year)</a>
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">🖊️</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">🗑️</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id" title="Edit">✏️</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" title="Delete">🗑️</a>
                 </td>
             </tr>
         }
