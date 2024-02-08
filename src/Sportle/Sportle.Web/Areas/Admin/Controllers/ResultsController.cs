@@ -30,8 +30,7 @@ namespace Sportle.Web.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var eventResult2024 = await _context.Results2024
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var eventResult2024 = await _context.Results2024.FirstOrDefaultAsync(m => m.Id == id);
             if (eventResult2024 == null)
             {
                 return NotFound();

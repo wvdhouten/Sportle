@@ -16,13 +16,11 @@ namespace Sportle.Web.Areas.Admin.Controllers
             _context = context;
         }
 
-        // GET: Admin/Seasons
         public async Task<IActionResult> Index()
         {
             return View(await _context.Seasons.ToListAsync());
         }
 
-        // GET: Admin/Seasons/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -40,15 +38,11 @@ namespace Sportle.Web.Areas.Admin.Controllers
             return View(season);
         }
 
-        // GET: Admin/Seasons/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Admin/Seasons/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Year")] Season season)
@@ -63,7 +57,6 @@ namespace Sportle.Web.Areas.Admin.Controllers
             return View(season);
         }
 
-        // GET: Admin/Seasons/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -79,9 +72,6 @@ namespace Sportle.Web.Areas.Admin.Controllers
             return View(season);
         }
 
-        // POST: Admin/Seasons/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, [Bind("Id,Year")] Season season)
@@ -114,7 +104,6 @@ namespace Sportle.Web.Areas.Admin.Controllers
             return View(season);
         }
 
-        // GET: Admin/Seasons/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -132,7 +121,6 @@ namespace Sportle.Web.Areas.Admin.Controllers
             return View(season);
         }
 
-        // POST: Admin/Seasons/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
