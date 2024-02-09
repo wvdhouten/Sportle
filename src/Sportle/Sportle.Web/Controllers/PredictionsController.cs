@@ -109,7 +109,6 @@ namespace Sportle.Web.Controllers
             ValidateSprintPrediction(prediction, @event, existingPrediction, now);
             ValidateQualificationPrediction(prediction, @event, existingPrediction, now);
             ValidateRacePrediction(prediction, @event, existingPrediction, now);
-
         }
 
         private void ValidateShootoutPrediction(EventPrediction2024 prediction, Event @event, EventPrediction2024? existingPrediction, DateTime now)

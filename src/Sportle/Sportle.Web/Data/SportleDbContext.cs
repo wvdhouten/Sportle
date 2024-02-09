@@ -246,46 +246,46 @@ namespace Sportle.Web.Data
                         @event.Sessions.Add(new Session { Type = SessionType.Race, Start = GetDateTimeWithOffset(2024, 07, 28, 15, 00, +1) });
                         break;
                     case "Zandvoort":
-                        @event.Sessions.Add(new Session { Type = SessionType.FreePractice1, Start = new DateTime(2024, 08, 23, 12, 30, +1) });
-                        @event.Sessions.Add(new Session { Type = SessionType.FreePractice2, Start = new DateTime(2024, 08, 23, 16, 00, +1) });
-                        @event.Sessions.Add(new Session { Type = SessionType.FreePractice3, Start = new DateTime(2024, 08, 24, 11, 30, +1) });
-                        @event.Sessions.Add(new Session { Type = SessionType.Qualification, Start = new DateTime(2024, 08, 24, 15, 00, +1) });
-                        @event.Sessions.Add(new Session { Type = SessionType.Race, Start = new DateTime(2024, 08, 25, 15, 00, +1) });
+                        @event.Sessions.Add(new Session { Type = SessionType.FreePractice1, Start = GetDateTimeWithOffset(2024, 08, 23, 12, 30, +1) });
+                        @event.Sessions.Add(new Session { Type = SessionType.FreePractice2, Start = GetDateTimeWithOffset(2024, 08, 23, 16, 00, +1) });
+                        @event.Sessions.Add(new Session { Type = SessionType.FreePractice3, Start = GetDateTimeWithOffset(2024, 08, 24, 11, 30, +1) });
+                        @event.Sessions.Add(new Session { Type = SessionType.Qualification, Start = GetDateTimeWithOffset(2024, 08, 24, 15, 00, +1) });
+                        @event.Sessions.Add(new Session { Type = SessionType.Race, Start = GetDateTimeWithOffset(2024, 08, 25, 15, 00, +1) });
                         break;
                     case "Monza":
-                        @event.Sessions.Add(new Session { Type = SessionType.FreePractice1, Start = new DateTime(2024, 08, 30, 13, 30, +1) });
-                        @event.Sessions.Add(new Session { Type = SessionType.FreePractice2, Start = new DateTime(2024, 08, 30, 17, 00, +1) });
-                        @event.Sessions.Add(new Session { Type = SessionType.FreePractice3, Start = new DateTime(2024, 08, 31, 12, 30, +1) });
-                        @event.Sessions.Add(new Session { Type = SessionType.Qualification, Start = new DateTime(2024, 08, 31, 16, 00, +1) });
-                        @event.Sessions.Add(new Session { Type = SessionType.Race, Start = new DateTime(2024, 09, 01, 15, 00, +1) });
+                        @event.Sessions.Add(new Session { Type = SessionType.FreePractice1, Start = GetDateTimeWithOffset(2024, 08, 30, 13, 30, +1) });
+                        @event.Sessions.Add(new Session { Type = SessionType.FreePractice2, Start = GetDateTimeWithOffset(2024, 08, 30, 17, 00, +1) });
+                        @event.Sessions.Add(new Session { Type = SessionType.FreePractice3, Start = GetDateTimeWithOffset(2024, 08, 31, 12, 30, +1) });
+                        @event.Sessions.Add(new Session { Type = SessionType.Qualification, Start = GetDateTimeWithOffset(2024, 08, 31, 16, 00, +1) });
+                        @event.Sessions.Add(new Session { Type = SessionType.Race, Start = GetDateTimeWithOffset(2024, 09, 01, 15, 00, +1) });
                         break;
                     case "Baku":
-                        @event.Sessions.Add(new Session { Type = SessionType.FreePractice1, Start = new DateTime(2024, 09, 13, 13, 30, +3) });
-                        @event.Sessions.Add(new Session { Type = SessionType.FreePractice2, Start = new DateTime(2024, 09, 13, 17, 00, +3) });
-                        @event.Sessions.Add(new Session { Type = SessionType.FreePractice3, Start = new DateTime(2024, 09, 14, 12, 30, +3) });
-                        @event.Sessions.Add(new Session { Type = SessionType.Qualification, Start = new DateTime(2024, 09, 14, 16, 00, +3) });
-                        @event.Sessions.Add(new Session { Type = SessionType.Race, Start = new DateTime(2024, 09, 15, 15, 00, +3) });
+                        @event.Sessions.Add(new Session { Type = SessionType.FreePractice1, Start = GetDateTimeWithOffset(2024, 09, 13, 13, 30, +3) });
+                        @event.Sessions.Add(new Session { Type = SessionType.FreePractice2, Start = GetDateTimeWithOffset(2024, 09, 13, 17, 00, +3) });
+                        @event.Sessions.Add(new Session { Type = SessionType.FreePractice3, Start = GetDateTimeWithOffset(2024, 09, 14, 12, 30, +3) });
+                        @event.Sessions.Add(new Session { Type = SessionType.Qualification, Start = GetDateTimeWithOffset(2024, 09, 14, 16, 00, +3) });
+                        @event.Sessions.Add(new Session { Type = SessionType.Race, Start = GetDateTimeWithOffset(2024, 09, 15, 15, 00, +3) });
                         break;
                     case "Marina Bay":
-                        @event.Sessions.Add(new Session { Type = SessionType.FreePractice1, Start = new DateTime(2024, 09, 20, 17, 30, -7) });
-                        @event.Sessions.Add(new Session { Type = SessionType.FreePractice2, Start = new DateTime(2024, 09, 20, 21, 00, -7) });
-                        @event.Sessions.Add(new Session { Type = SessionType.FreePractice3, Start = new DateTime(2024, 09, 21, 17, 30, -7) });
-                        @event.Sessions.Add(new Session { Type = SessionType.Qualification, Start = new DateTime(2024, 09, 21, 21, 00, -7) });
-                        @event.Sessions.Add(new Session { Type = SessionType.Race, Start = new DateTime(2024, 09, 22, 20, 00, -7) });
+                        @event.Sessions.Add(new Session { Type = SessionType.FreePractice1, Start = GetDateTimeWithOffset(2024, 09, 20, 17, 30, -7) });
+                        @event.Sessions.Add(new Session { Type = SessionType.FreePractice2, Start = GetDateTimeWithOffset(2024, 09, 20, 21, 00, -7) });
+                        @event.Sessions.Add(new Session { Type = SessionType.FreePractice3, Start = GetDateTimeWithOffset(2024, 09, 21, 17, 30, -7) });
+                        @event.Sessions.Add(new Session { Type = SessionType.Qualification, Start = GetDateTimeWithOffset(2024, 09, 21, 21, 00, -7) });
+                        @event.Sessions.Add(new Session { Type = SessionType.Race, Start = GetDateTimeWithOffset(2024, 09, 22, 20, 00, -7) });
                         break;
                     case "Circuit of the Americas":
                         //@event.Sessions.Add(new Session { Type = SessionType.FreePractice1, Start = new DateTime(2024, 03, 07, 17, 30, 00).WithOffset(-7) });
                         //@event.Sessions.Add(new Session { Type = SessionType.FreePractice2, Start = new DateTime(2024, 03, 07, 21, 00, 00).WithOffset(-7) });
                         //@event.Sessions.Add(new Session { Type = SessionType.FreePractice3, Start = new DateTime(2024, 03, 08, 17, 30, 00).WithOffset(-7) });
                         //@event.Sessions.Add(new Session { Type = SessionType.Qualification, Start = new DateTime(2024, 03, 08, 21, 00, 00).WithOffset(-7) });
-                        @event.Sessions.Add(new Session { Type = SessionType.Race, Start = new DateTime(2024, 10, 20, 14, 00, +6) });
+                        @event.Sessions.Add(new Session { Type = SessionType.Race, Start = GetDateTimeWithOffset(2024, 10, 20, 14, 00, +6) });
                         break;
                     case "Hermanos Rodriguez":
-                        @event.Sessions.Add(new Session { Type = SessionType.FreePractice1, Start = new DateTime(2024, 10, 25, 12, 30, +6) });
-                        @event.Sessions.Add(new Session { Type = SessionType.FreePractice2, Start = new DateTime(2024, 10, 25, 16, 00, +6) });
-                        @event.Sessions.Add(new Session { Type = SessionType.FreePractice3, Start = new DateTime(2024, 10, 26, 11, 30, +6) });
-                        @event.Sessions.Add(new Session { Type = SessionType.Qualification, Start = new DateTime(2024, 10, 26, 15, 00, +6) });
-                        @event.Sessions.Add(new Session { Type = SessionType.Race, Start = new DateTime(2024, 10, 27, 14, 00, +6) });
+                        @event.Sessions.Add(new Session { Type = SessionType.FreePractice1, Start = GetDateTimeWithOffset(2024, 10, 25, 12, 30, +6) });
+                        @event.Sessions.Add(new Session { Type = SessionType.FreePractice2, Start = GetDateTimeWithOffset(2024, 10, 25, 16, 00, +6) });
+                        @event.Sessions.Add(new Session { Type = SessionType.FreePractice3, Start = GetDateTimeWithOffset(2024, 10, 26, 11, 30, +6) });
+                        @event.Sessions.Add(new Session { Type = SessionType.Qualification, Start = GetDateTimeWithOffset(2024, 10, 26, 15, 00, +6) });
+                        @event.Sessions.Add(new Session { Type = SessionType.Race, Start = GetDateTimeWithOffset    (2024, 10, 27, 14, 00, +6) });
                         break;
                     case "Interlagos, São Paulo":
                         //@event.Sessions.Add(new Session { Type = SessionType.FreePractice1, Start = new DateTime(2024, 03, 07, 16, 30, 00).WithOffset(-3) });
