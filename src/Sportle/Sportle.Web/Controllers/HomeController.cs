@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Sportle.Web.Data;
+using Sportle.Web.Extensions;
 using Sportle.Web.Models;
+using Sportle.Web.Models.Formula1;
 using System.Diagnostics;
 
 namespace Sportle.Web.Controllers
@@ -32,13 +33,19 @@ namespace Sportle.Web.Controllers
 
         public IActionResult Index()
         {
-            var events = _context.Seasons.First(s => s.Year == 2024).Events;
-            var now = DateTime.Now;
+            var now = DateTime.UtcNow;
+            var events = _context.Seasons.First(s => s.Year == 2024).Events
+                .OrderByDescending(e => e.Sessions.First(s => s.Type == SessionType.Race).Start > now)
+                .ThenBy(e => e.Sessions.First(s => s.Type == SessionType.Race).Start)
+                .ToList();
+
+            _ = User.HasId(out var userId);
+            var predictions = _context.Predictions2024.Where(p => p.UserId == userId).ToList();
 
             var model = new DashboardViewModel
             {
                 Events = events,
-                NextEvent = events.OrderBy(e => e.Sessions.First(s => s.Type == Models.Formula1.SessionType.Race).Start).FirstOrDefault(e => e.Sessions.Any(s => s.Start > now))               
+                Predictions = predictions
             };
 
             return View(model);
@@ -48,7 +55,7 @@ namespace Sportle.Web.Controllers
         {
             var events = _context.Seasons.FirstOrDefault(s => s.Year == 2024)?.Events.Select(e => e.Id).ToList() ?? [];
 
-            var userScores = _context.Users.Select((u, i) => new UserScore { Position = i + 1, User = u, Score = GetUserScore(_context, u, events) }).ToList();
+            var userScores = _context.Users.Select(u => new UserScore { User = u, Score = GetUserScore(_context, u, events) }).ToList();
 
             return View(userScores);
         }

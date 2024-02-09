@@ -5,28 +5,24 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-
-    <h3>Next Event</h3>
-    @if (Model.NextEvent != null)
-    {
-        <div class="card text-center mb-3">
-            <div class="card-body">
-                <h5 class="card-title">@Model.NextEvent.Venue.Name (@Model.NextEvent.Venue.Country)</h5>
-                <p class="card-text">@Model.NextEvent.GetDateRange()</p>
-                <a asp-area="" asp-controller="Predictions" asp-action="Index" asp-route-id="@Model.NextEvent.Id" class="btn btn-primary">Predict</a>
+    <h2 class="display-6 mb-4">F1 Season 2024</h2>
+    <div class="list-group">
+        @foreach (var e in Model.Events)
+        {
+            var now = DateTime.UtcNow;
+            var hasPrediction = Model.Predictions.Any(p => p.EventId == e.Id);
+            var isInPast = (e.Sessions.First(s => s.Type == SessionType.Race).Start < now);
+            <div class="card text-center mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">@e.Venue.Name (@e.Venue.Country)</h5>
+                    <p class="card-text small">@e.GetDateRange()</p>
+                    <p condition="@(!hasPrediction && !isInPast)">⚠️ Not yet predicted ⚠️</p>
+                    <p condition="@(hasPrediction && !isInPast)">✅ Prediction submitted ✅</p>
+                    <span condition="@(!hasPrediction && isInPast)">❌ Nothing predicted ❌</span>
+                    <a condition="@(!isInPast)" asp-area="" asp-controller="Predictions" asp-action="Index" asp-route-id="@e.Id" class="btn btn-primary btn-sm">Predict</a>
+                    <a condition="@(hasPrediction && isInPast)" asp-area="" asp-controller="Predictions" asp-action="Result" asp-route-id="@e.Id" class="btn btn-primary btn-sm">Results</a>
+                </div>
             </div>
-        </div>
-    }
-
-    <h3>All Events (2024)</h3>
-    @foreach (var e in Model.Events)
-    {
-        <div class="card text-center mb-3">
-            <div class="card-body">
-                <h5 class="card-title">@e.Venue.Name (@e.Venue.Country)</h5>
-                <p class="card-text">@e.GetDateRange()</p>
-                <a asp-area="" asp-controller="Predictions" asp-action="Index" asp-route-id="@e.Id" class="btn btn-primary">Predict</a>
-            </div>
-        </div>
-    }
+        }
+    </div>
 </div>

@@ -4,8 +4,8 @@ namespace Sportle.Web.Models
 {
     public class DashboardViewModel
     {
-        public Event? NextEvent { get; set; }
-
         public List<Event> Events { get; set; } = [];
+
+        public List<EventPrediction2024> Predictions { get; set; } = [];
     }
 }

@@ -1,6 +1,7 @@
 ﻿@model List<UserScore>
 @{
     ViewData["Title"] = "Leaderboard";
+    var position = 0;
 }
 
 <div class="text-center">
@@ -11,8 +12,9 @@
     <ul class="list-group top">
         @foreach (var userScore in Model)
         {
+            position++;
             <li class="list-group-item d-flex justify-content-between align-items-center">
-                <span class="position">@userScore.Position</span>
+                <span class="position">@position</span>
                 <span class="name">@userScore.User.UserName</span>
                 <span class="badge rounded-pill">@userScore.Score</span>
             </li>

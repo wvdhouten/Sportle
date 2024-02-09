@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Sportle.Web.Data;
+using Sportle.Web.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,9 +11,14 @@ builder.Services.AddDbContext<SportleDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services
+    .AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<SportleDbContext>();
+
+builder.Services.AddAuthentication()
+    .TryAddGoogle(builder.Configuration.GetSection("Authentication:Google"));
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
