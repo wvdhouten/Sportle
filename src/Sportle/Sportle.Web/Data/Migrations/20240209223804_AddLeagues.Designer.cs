@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sportle.Web.Data;
 
@@ -11,9 +12,11 @@ using Sportle.Web.Data;
 namespace Sportle.Web.Data.Migrations
 {
     [DbContext(typeof(SportleDbContext))]
-    partial class SportleDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240209223804_AddLeagues")]
+    partial class AddLeagues
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace Sportle.Web.Data.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("IdentityUserLeague", (string)null);
+                    b.ToTable("IdentityUserLeague");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -266,7 +269,7 @@ namespace Sportle.Web.Data.Migrations
 
                     b.HasIndex("SeasonId");
 
-                    b.ToTable("Drivers", (string)null);
+                    b.ToTable("Drivers");
                 });
 
             modelBuilder.Entity("Sportle.Web.Models.Formula1.Event", b =>
@@ -287,7 +290,7 @@ namespace Sportle.Web.Data.Migrations
 
                     b.HasIndex("VenueId");
 
-                    b.ToTable("Events", (string)null);
+                    b.ToTable("Events");
                 });
 
             modelBuilder.Entity("Sportle.Web.Models.Formula1.EventPrediction2024", b =>
@@ -363,7 +366,7 @@ namespace Sportle.Web.Data.Migrations
 
                     b.HasKey("UserId", "EventId");
 
-                    b.ToTable("Predictions2024", (string)null);
+                    b.ToTable("Predictions2024");
                 });
 
             modelBuilder.Entity("Sportle.Web.Models.Formula1.EventResult2024", b =>
@@ -425,7 +428,7 @@ namespace Sportle.Web.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Results2024", (string)null);
+                    b.ToTable("Results2024");
                 });
 
             modelBuilder.Entity("Sportle.Web.Models.Formula1.League", b =>
@@ -449,7 +452,7 @@ namespace Sportle.Web.Data.Migrations
 
                     b.HasIndex("AdminId");
 
-                    b.ToTable("Leagues", (string)null);
+                    b.ToTable("Leagues");
                 });
 
             modelBuilder.Entity("Sportle.Web.Models.Formula1.Season", b =>
@@ -463,7 +466,7 @@ namespace Sportle.Web.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Seasons", (string)null);
+                    b.ToTable("Seasons");
                 });
 
             modelBuilder.Entity("Sportle.Web.Models.Formula1.Session", b =>
@@ -485,7 +488,7 @@ namespace Sportle.Web.Data.Migrations
 
                     b.HasIndex("EventId");
 
-                    b.ToTable("Sessions", (string)null);
+                    b.ToTable("Sessions");
                 });
 
             modelBuilder.Entity("Sportle.Web.Models.Formula1.Venue", b =>
@@ -504,7 +507,7 @@ namespace Sportle.Web.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Venues", (string)null);
+                    b.ToTable("Venues");
                 });
 
             modelBuilder.Entity("IdentityUserLeague", b =>

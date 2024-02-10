@@ -14,9 +14,11 @@
     });
 }
 
-<h1>@e?.Venue.Name (@e?.Venue.Country)</h1>
-<h4>@e?.GetDateRange()</h4>
+<h1 class="display-4 mb-3">@e?.Venue.Name (@e?.Venue.Country)</h1>
+<h4 class="mb-4">@e?.GetDateRange()</h4>
+
 <hr />
+
 <div class="row">
     <form asp-action="Index">
         <div asp-validation-summary="All" class="text-danger"></div>

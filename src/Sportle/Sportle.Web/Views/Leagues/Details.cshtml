@@ -1,4 +1,4 @@
-﻿@model List<UserScore>
+﻿@model LeagueDetailsViewModel
 @{
     ViewData["Title"] = "Leaderboard";
     var position = 0;
@@ -6,12 +6,13 @@
 
 <div class="text-center">
     <h1 class="display-4 mb-3">Leaderboard</h1>
-    <h4 class="mb-4">F1 Season 2024</h4>
+    <h4 class="mb-4">@Model.League.Name | F1 Season 2024</h4>
+    <a asp-action="Events" asp-route-id="@Model.League.Id">Events</a>
 
     <hr />
 
     <ul class="list-group top">
-        @foreach (var userScore in Model)
+        @foreach (var userScore in Model.Users)
         {
             position++;
             <li class="list-group-item d-flex justify-content-between align-items-center">

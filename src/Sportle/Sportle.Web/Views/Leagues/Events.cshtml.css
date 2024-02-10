@@ -1,0 +1,21 @@
+﻿.list-group {
+    margin: auto;
+    max-width: 500px;
+}
+
+.list-group li .badge {
+    background-color: #FFFFFF;
+    color: #000000;
+}
+
+.top li:nth-child(1) .badge {
+    background-color: #FFD700;
+}
+
+.top li:nth-child(2) .badge {
+    background-color: #C0C0C0;
+}
+
+.top li:nth-child(3) .badge {
+    background-color: #CD7F32;
+}

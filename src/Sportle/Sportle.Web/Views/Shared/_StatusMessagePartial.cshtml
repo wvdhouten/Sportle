@@ -1,0 +1,11 @@
+﻿@{
+    var statusMessage = (string?)TempData["StatusMessage"];
+    var errorMessage = (string?)TempData["ErrorMessage"];
+}
+
+<div class="alert alert-danger" role="alert" condition="!string.IsNullOrEmpty(errorMessage)">
+    ⚠️ @errorMessage
+</div>
+<div class="alert alert-success" role="alert" condition="!string.IsNullOrEmpty(statusMessage)">
+    ℹ️ @statusMessage
+</div>

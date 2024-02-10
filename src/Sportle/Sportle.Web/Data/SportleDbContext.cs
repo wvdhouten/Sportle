@@ -20,11 +20,16 @@ namespace Sportle.Web.Data
             builder.Entity<Season>().Navigation(s => s.Events).AutoInclude();
             builder.Entity<Event>().Navigation(s => s.Venue).AutoInclude();
             builder.Entity<Event>().Navigation(s => s.Sessions).AutoInclude();
+
+            builder.Entity<League>().HasMany(l => l.Users).WithMany();
+            builder.Entity<League>().Navigation(l => l.Users).AutoInclude();
         }
 
         public DbSet<Season> Seasons { get; set; }
 
         public DbSet<Event> Events { get; set; }
+
+        public DbSet<League> Leagues { get; set; }
 
         public DbSet<EventPrediction2024> Predictions2024 { get; set; }
 
@@ -36,7 +41,6 @@ namespace Sportle.Web.Data
 
         public void Repair(bool seed = false)
         {
-            Database.EnsureCreated();
             Database.Migrate();
 
             if (seed)

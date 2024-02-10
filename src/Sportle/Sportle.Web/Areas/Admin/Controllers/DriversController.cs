@@ -16,13 +16,11 @@ namespace Sportle.Web.Areas.Admin.Controllers
             _context = context;
         }
 
-        // GET: Admin/Drivers
         public async Task<IActionResult> Index()
         {
             return View(await _context.Drivers.ToListAsync());
         }
 
-        // GET: Admin/Drivers/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -40,18 +38,14 @@ namespace Sportle.Web.Areas.Admin.Controllers
             return View(driver);
         }
 
-        // GET: Admin/Drivers/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Admin/Drivers/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Nationality")] Driver driver)
+        public async Task<IActionResult> Create([Bind("Id,Number,Name,Team,Country")] Driver driver)
         {
             if (ModelState.IsValid)
             {
@@ -63,7 +57,6 @@ namespace Sportle.Web.Areas.Admin.Controllers
             return View(driver);
         }
 
-        // GET: Admin/Drivers/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -79,9 +72,6 @@ namespace Sportle.Web.Areas.Admin.Controllers
             return View(driver);
         }
 
-        // POST: Admin/Drivers/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,Nationality")] Driver driver)
@@ -114,7 +104,6 @@ namespace Sportle.Web.Areas.Admin.Controllers
             return View(driver);
         }
 
-        // GET: Admin/Drivers/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -132,7 +121,6 @@ namespace Sportle.Web.Areas.Admin.Controllers
             return View(driver);
         }
 
-        // POST: Admin/Drivers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)

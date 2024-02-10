@@ -1,0 +1,25 @@
+﻿@model IEnumerable<League>
+
+@{
+    ViewData["Title"] = "Leagues";
+}
+
+<div class="text-center">
+    <h1 class="display-4 mb-3">Leagues</h1>
+    <h4 class="mb-4">F1 Season 2024</h4>
+    <a asp-action="Join">Join</a> | <a asp-action="Create">Create</a>
+    
+    <hr />
+
+    <div class="list-group">
+        @foreach (var l in Model)
+        {
+            <div class="card text-center mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">@l.Name</h5>
+                    <a asp-area="" asp-controller="Leagues" asp-action="Details" asp-route-id="@l.Id" class="btn btn-primary btn-sm">Leaderboard</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>

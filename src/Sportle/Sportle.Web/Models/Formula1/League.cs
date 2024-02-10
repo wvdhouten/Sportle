@@ -10,6 +10,10 @@ namespace Sportle.Web.Models.Formula1
 
         public required string Name { get; set; }
 
+        public required string Code { get; set; }
+
+        public required IdentityUser Admin { get; set; }
+
         public List<IdentityUser> Users { get; set; } = [];
     }
 }

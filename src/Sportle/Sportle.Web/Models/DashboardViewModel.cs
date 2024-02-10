@@ -7,5 +7,7 @@ namespace Sportle.Web.Models
         public List<Event> Events { get; set; } = [];
 
         public List<EventPrediction2024> Predictions { get; set; } = [];
+
+        public League? League { get; set; }
     }
 }

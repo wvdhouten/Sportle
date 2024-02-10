@@ -1,0 +1,33 @@
+﻿@model League
+
+@{
+    ViewData["Title"] = "Create League";
+}
+
+<h1>Join League</h1>
+<h4 condition="Model is not null">@Model.Name</h4>
+<hr />
+<div class="row">
+    <form asp-action="Join">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="row mb-2">
+            <label asp-for="Code" class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9">
+                <input asp-for="Code" class="form-control" />
+            </div>
+        </div>
+        <div class="mb-3 text-end">
+            <input type="submit" value="Join" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
