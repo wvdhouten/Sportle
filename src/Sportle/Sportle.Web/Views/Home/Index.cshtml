@@ -1,31 +1,44 @@
 ﻿@model DashboardViewModel
 @{
     ViewData["Title"] = "Events";
-    var now = DateTime.UtcNow;
+    var isAdmin = User.IsInRole("Admin");
 }
 
 <div class="text-center">
-    <h1 class="display-4 mb-3">Events</h1>
+    <h1 class="display-4 mb-3">Dashboard</h1>
     <h4 class="mb-4">F1 Season 2024</h4>
-    
+
     <hr />
 
-    <div class="list-group narrow">
-        @foreach (var e in Model.Events)
-        {
-            var hasPrediction = Model.Predictions.Any(p => p.EventId == e.Id);
-            var isInPast = (e.Sessions.First(s => s.Type == SessionType.Race).Start < now);
-            <div class="card text-center mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">@e.Venue.Name (@e.Venue.Country)</h5>
-                    <p class="card-text small">@e.GetDateRange()</p>
-                    <p condition="@(!hasPrediction && !isInPast)">⚠️ Not yet predicted ⚠️</p>
-                    <p condition="@(hasPrediction && !isInPast)">✅ Prediction submitted ✅</p>
-                    <span condition="@(!hasPrediction && isInPast)">❌ Nothing predicted ❌</span>
-                    <a condition="@(!isInPast)" asp-area="" asp-controller="Events" asp-action="Prediction" asp-route-id="@e.Id" class="btn btn-primary btn-sm">Predict</a>
-                    <a condition="@(hasPrediction && isInPast)" asp-area="" asp-controller="Events" asp-action="Result" asp-route-id="@e.Id" class="btn btn-primary btn-sm">Results</a>
-                </div>
+    <h6 class="display-6 mb-3">Previous Event</h6>
+
+    <div class="narrow">
+        <div condition="Model.PrevEvent is not null" class="card text-center mb-3">
+            <div class="card-body">
+                <h5 class="card-title">@Model.PrevEvent?.Venue.Name (@Model.PrevEvent?.Venue.Country)</h5>
+                <p class="card-text small">@Model.PrevEvent?.GetDateRange()</p>
+                <span condition="@(Model.PrevPrediction is null)">❌ Nothing predicted ❌</span>
+                <a asp-area="" asp-controller="Events" asp-action="Result" asp-route-id="@Model.PrevEvent?.Id" class="btn btn-primary btn-sm">Results</a>
+                <a condition="@(isAdmin)" asp-area="" asp-controller="Events" asp-action="UpdateResult" asp-route-id="@Model.PrevEvent?.Id" class="btn btn-warning btn-sm">Update Results</a>
             </div>
-        }
+        </div>
+        <p condition="Model.PrevEvent is null">None.</p>
     </div>
+
+    <h6 class="display-6 mb-3">Next Event</h6>
+
+    <div class="narrow">
+        <div condition="Model.NextEvent is not null" class="card text-center mb-3">
+            <div class="card-body">
+                <h5 class="card-title">@Model.NextEvent?.Venue.Name (@Model.NextEvent?.Venue.Country)</h5>
+                <p class="card-text small">@Model.NextEvent?.GetDateRange()</p>
+                <p condition="@(Model.NextPrediction is null)">⚠️ Not yet predicted ⚠️</p>
+                <p condition="@(Model.NextPrediction is not null)">✅ Prediction submitted ✅</p>
+                <a asp-area="" asp-controller="Events" asp-action="Prediction" asp-route-id="@Model.NextEvent?.Id" class="btn btn-primary btn-sm">Predict</a>
+            </div>
+        </div>
+        <p condition="Model.NextEvent is null">None.</p>
+    </div>
+
+    <a asp-controller="Events" asp-action="Index">All Events</a>
 </div>

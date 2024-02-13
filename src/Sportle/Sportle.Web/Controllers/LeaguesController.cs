@@ -126,7 +126,7 @@ namespace Sportle.Web.Controllers
             _ = User.HasId(out var userId);
             var predictions = _context.Predictions2024.Where(p => p.UserId == userId).ToList();
 
-            var model = new DashboardViewModel
+            var model = new AllEventsViewModel
             {
                 League = league,
                 Events = events,

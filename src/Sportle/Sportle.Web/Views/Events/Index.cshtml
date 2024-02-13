@@ -2,13 +2,13 @@
 @{
     ViewData["Title"] = "Events";
     var now = DateTime.UtcNow;
+    var isAdmin = User.IsInRole("Admin");
 }
 
 <div class="text-center">
     <h1 class="display-4 mb-3">Events</h1>
-    <h4 class="mb-4">@Model.League?.Name | F1 Season 2024</h4>
-    <h6>Code: @Model.League?.Code</h6>
-
+    <h4 class="mb-4">F1 Season 2024</h4>
+    
     <hr />
 
     <div class="list-group narrow">
@@ -23,9 +23,9 @@
                     <p condition="@(!hasPrediction && !isInPast)">⚠️ Not yet predicted ⚠️</p>
                     <p condition="@(hasPrediction && !isInPast)">✅ Prediction submitted ✅</p>
                     <span condition="@(!hasPrediction && isInPast)">❌ Nothing predicted ❌</span>
-                    <a asp-area="" asp-controller="Leagues" asp-action="EventDetails" asp-route-id="@Model.League?.Id" asp-route-eventId="@e.Id" class="btn btn-primary btn-sm">Details</a>
-                    <a condition="@(!isInPast)" asp-area="" asp-controller="Predictions" asp-action="Index" asp-route-id="@e.Id" class="btn btn-primary btn-sm">Predict</a>
-                    <a condition="@(hasPrediction && isInPast)" asp-area="" asp-controller="Predictions" asp-action="Result" asp-route-id="@e.Id" class="btn btn-primary btn-sm">Results</a>
+                    <a condition="@(!isInPast)" asp-area="" asp-controller="Events" asp-action="Prediction" asp-route-id="@e.Id" class="btn btn-primary btn-sm">Predict</a>
+                    <a condition="@(hasPrediction && isInPast)" asp-area="" asp-controller="Events" asp-action="Result" asp-route-id="@e.Id" class="btn btn-primary btn-sm">Results</a>
+                    <a condition="@(isAdmin && isInPast)" asp-area="" asp-controller="Events" asp-action="UpdateResult" asp-route-id="@e.Id" class="btn btn-warning btn-sm">Update Results</a>
                 </div>
             </div>
         }

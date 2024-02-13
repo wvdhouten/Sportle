@@ -4,10 +4,12 @@ namespace Sportle.Web.Models
 {
     public class DashboardViewModel
     {
-        public List<Event> Events { get; set; } = [];
+        public Event? PrevEvent { get; set; }
 
-        public List<EventPrediction2024> Predictions { get; set; } = [];
+        public EventPrediction2024? PrevPrediction { get; set; }
 
-        public League? League { get; set; }
+        public Event? NextEvent { get; set; }
+
+        public EventPrediction2024? NextPrediction { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Sportle.Web.Data;
 using Sportle.Web.Extensions;
+using Sportle.Web.Models;
 using Sportle.Web.Models.Formula1;
 using System.Security.Claims;
 
@@ -16,6 +17,26 @@ namespace Sportle.Web.Controllers
         public EventsController(SportleDbContext context)
         {
             _context = context;
+        }
+
+        public IActionResult Index()
+        {
+            var now = DateTime.UtcNow;
+            var events = _context.Seasons.First(s => s.Year == 2024).Events
+                //.OrderByDescending(e => e.Sessions.First(s => s.Type == SessionType.Race).Start > now)
+                .OrderBy(e => e.Sessions.First(s => s.Type == SessionType.Race).Start)
+                .ToList();
+
+            _ = User.HasId(out var userId);
+            var predictions = _context.Predictions2024.Where(p => p.UserId == userId).ToList();
+
+            var model = new AllEventsViewModel
+            {
+                Events = events,
+                Predictions = predictions
+            };
+
+            return View(model);
         }
 
         public async Task<IActionResult> Prediction(Guid? id)
@@ -81,6 +102,75 @@ namespace Sportle.Web.Controllers
                 StatusMessage = "Predictions submitted successfully!";
 
                 return RedirectToAction("Index", "Home");
+            }
+
+            var drivers = _context.Drivers.ToList();
+
+            ViewData["Event"] = @event;
+            ViewData["Drivers"] = drivers;
+
+            return View(model);
+        }
+
+        [Authorize("Admin")]
+        public async Task<IActionResult> UpdateResult(Guid? id)
+        {
+            if (id is null)
+                return NotFound();
+
+            var @event = _context.Events.FirstOrDefault(e => e.Id == id);
+            if (@event is null)
+                return NotFound();
+
+            var eventResult2024 = await _context.Results2024.FirstOrDefaultAsync(r => r.Id == id) ?? new EventResult2024 { EventId = id.Value };
+
+            var drivers = _context.Drivers.ToList();
+
+            ViewData["Event"] = @event;
+            ViewData["Drivers"] = drivers;
+
+            return View(eventResult2024);
+        }
+
+        [HttpPost]
+        [Authorize("Admin")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateResult(Guid? id, EventResult2024 model)
+        {
+            if (id is null)
+                return NotFound();
+
+            var @event = _context.Events.FirstOrDefault(e => e.Id == id);
+            if (@event is null)
+                return NotFound();
+
+            if (!User.HasId(out var userId))
+                return NotFound();
+
+            ValidateResult(model, @event);
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    model.ModifiedOn = DateTime.UtcNow;
+
+                    _context.Update(model);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!_context.Results2024.Any(p => p.EventId == id))
+                    {
+                        _context.Add(model);
+                        await _context.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
             }
 
             var drivers = _context.Drivers.ToList();
@@ -239,6 +329,68 @@ namespace Sportle.Web.Controllers
         {
             var positionFormatted = position.Replace("Race", "Race ");
             ModelState.AddModelError(position, $"{positionFormatted} has to be unique required.");
+        }
+
+        private void ValidateResult(EventResult2024 result, Event @event)
+        {
+            var raceStart = @event.Sessions.FirstOrDefault(s => s.Type == SessionType.Race)?.Start;
+            if (raceStart is null)
+            {
+                ModelState.AddModelError("", "Event doesn't have a race session.");
+                return;
+            }
+
+            if (raceStart.Value > DateTime.UtcNow)
+                ModelState.AddModelError("", "Cannot enter results before the race has started.");
+
+            var hasSprint = @event.Sessions.Any(s => s.Type == SessionType.Sprint);
+            if (hasSprint)
+            {
+                if (result.SprintPP is null)
+                    ModelState.AddModelError(nameof(result.SprintPP), "Sprint Pole Position is required.");
+                if (result.SprintP1 is null)
+                    ModelState.AddModelError(nameof(result.SprintP1), "Sprint P1 is required.");
+                if (result.SprintPP is null)
+                    ModelState.AddModelError(nameof(result.SprintPP), "Sprint Fastest Lap is required.");
+            }
+
+            if (result.RacePP is null)
+                ModelState.AddModelError(nameof(result.RacePP), "Sprint Pole Position is required.");
+            if (result.RaceP1 is null)
+                ModelState.AddModelError(nameof(result.RaceP1), "Race P1 is required.");
+            if (result.RaceP2 is null)
+                ModelState.AddModelError(nameof(result.RaceP2), "Race P2 is required.");
+            if (result.RaceP3 is null)
+                ModelState.AddModelError(nameof(result.RaceP3), "Race P3 is required.");
+            if (result.RaceP4 is null)
+                ModelState.AddModelError(nameof(result.RaceP4), "Race P4 is required.");
+            if (result.RaceP5 is null)
+                ModelState.AddModelError(nameof(result.RaceP5), "Race P5 is required.");
+            if (result.RaceP6 is null)
+                ModelState.AddModelError(nameof(result.RaceP6), "Race P6 is required.");
+            if (result.RaceP7 is null)
+                ModelState.AddModelError(nameof(result.RaceP7), "Race P7 is required.");
+            if (result.RaceP8 is null)
+                ModelState.AddModelError(nameof(result.RaceP8), "Race P8 is required.");
+            if (result.RaceP9 is null)
+                ModelState.AddModelError(nameof(result.RaceP9), "Race P9 is required.");
+            if (result.RaceP10 is null)
+                ModelState.AddModelError(nameof(result.RaceP10), "Race P10 is required.");
+            if (result.RaceFL is null)
+                ModelState.AddModelError(nameof(result.RaceFL), "Race Fastest Lap is required.");
+
+            var uniqueResults = new Dictionary<Guid, List<string>>();
+
+            ValidateRacePosition(uniqueResults, result.RaceP1, nameof(result.RaceP1));
+            ValidateRacePosition(uniqueResults, result.RaceP2, nameof(result.RaceP2));
+            ValidateRacePosition(uniqueResults, result.RaceP3, nameof(result.RaceP3));
+            ValidateRacePosition(uniqueResults, result.RaceP4, nameof(result.RaceP4));
+            ValidateRacePosition(uniqueResults, result.RaceP5, nameof(result.RaceP5));
+            ValidateRacePosition(uniqueResults, result.RaceP6, nameof(result.RaceP6));
+            ValidateRacePosition(uniqueResults, result.RaceP7, nameof(result.RaceP7));
+            ValidateRacePosition(uniqueResults, result.RaceP8, nameof(result.RaceP8));
+            ValidateRacePosition(uniqueResults, result.RaceP9, nameof(result.RaceP9));
+            ValidateRacePosition(uniqueResults, result.RaceP10, nameof(result.RaceP10));
         }
     }
 }

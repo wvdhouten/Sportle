@@ -23,20 +23,26 @@ namespace Sportle.Web.Controllers
 
         public IActionResult Index()
         {
-            var now = DateTime.UtcNow;
-            var events = _context.Seasons.First(s => s.Year == 2024).Events
-                .OrderByDescending(e => e.Sessions.First(s => s.Type == SessionType.Race).Start > now)
-                .ThenBy(e => e.Sessions.First(s => s.Type == SessionType.Race).Start)
-                .ToList();
-
-            _ = User.HasId(out var userId);
-            var predictions = _context.Predictions2024.Where(p => p.UserId == userId).ToList();
-
             var model = new DashboardViewModel
             {
-                Events = events,
-                Predictions = predictions
+                NextEvent = _context.Seasons.First(s => s.Year == 2024).Events
+                .Where(e => e.Sessions.First(s => s.Type == SessionType.Race).Start > DateTime.Now)
+                .OrderBy(e => e.Sessions.First(s => s.Type == SessionType.Race).Start)
+                .FirstOrDefault(),
+
+                PrevEvent = _context.Seasons.First(s => s.Year == 2024).Events
+                .Where(e => e.Sessions.First(s => s.Type == SessionType.Race).Start < DateTime.Now)
+                .OrderBy(e => e.Sessions.First(s => s.Type == SessionType.Race).Start)
+                .FirstOrDefault()
             };
+
+            _ = User.HasId(out var userId);
+
+            if (model.NextEvent != null)
+                model.NextPrediction = _context.Predictions2024.FirstOrDefault(p => p.UserId == userId && p.EventId == model.NextEvent.Id);
+
+            if (model.PrevEvent != null)
+                model.PrevPrediction = _context.Predictions2024.FirstOrDefault(p => p.UserId == userId && p.EventId == model.NextEvent.Id);
 
             return View(model);
         }

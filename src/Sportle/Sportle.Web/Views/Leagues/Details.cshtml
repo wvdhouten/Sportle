@@ -7,7 +7,8 @@
 <div class="text-center">
     <h1 class="display-4 mb-3">Leaderboard</h1>
     <h4 class="mb-4">@Model.League.Name | F1 Season 2024</h4>
-    <a asp-action="Events" asp-route-id="@Model.League.Id">Events</a>
+    <h6>Code: @Model.League?.Code</h6>
+    <a asp-action="Events" asp-route-id="@Model.League?.Id">Events</a>
 
     <hr />
 
