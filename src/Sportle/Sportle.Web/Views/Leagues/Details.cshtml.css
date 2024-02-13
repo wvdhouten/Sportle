@@ -1,9 +1,4 @@
-﻿.list-group {
-    margin: auto;
-    max-width: 500px;
-}
-
-.list-group li .badge {
+﻿.list-group li .badge {
     background-color: #FFFFFF;
     color: #000000;
 }

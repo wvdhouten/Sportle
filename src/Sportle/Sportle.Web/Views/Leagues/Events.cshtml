@@ -10,7 +10,7 @@
 
     <hr />
 
-    <div class="list-group">
+    <div class="list-group narrow">
         @foreach (var e in Model.Events)
         {
             var hasPrediction = Model.Predictions.Any(p => p.EventId == e.Id);

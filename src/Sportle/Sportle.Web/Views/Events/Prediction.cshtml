@@ -6,13 +6,44 @@
     var e = ViewData["Event"] as Event;
     var hasSprint = e?.Sessions.Any(s => s.Type == SessionType.Sprint) ?? false;
 
-    var drivers = ViewData["Drivers"] as IList<Driver> ?? new List<Driver>();
-    var driverOptions = drivers.OrderBy(d => d.Name).Select(d => new SelectListItem { Text = $"{d.Name} ({d.Number})", Value = d.Id.ToString() });
+    var now = DateTime.UtcNow;
+    var isShootOutOver = (e?.Sessions.FirstOrDefault(s => s.Type == SessionType.Shootout)?.Start ?? default) < now;
+    var isSprintOver = (e?.Sessions.FirstOrDefault(s => s.Type == SessionType.Sprint)?.Start ?? default) < now;
+    var isQualifcationOver = (e?.Sessions.FirstOrDefault(s => s.Type == SessionType.Qualification)?.Start ?? default) < now;
+    var isRaceOver = (e?.Sessions.FirstOrDefault(s => s.Type == SessionType.Race)?.Start ?? default) < now;
 
-    Func<SelectListItem, Guid?, SelectListItem> DriverOptionsWithSelected = new Func<SelectListItem, Guid?, SelectListItem>((d, s) => {
+    var drivers = ViewData["Drivers"] as IList<Driver> ?? new List<Driver>();
+    var driverOptions = drivers.Select(d => new SelectListItem { Text = $"{d.Name} ({d.Number})", Value = d.Id.ToString() });
+
+    Func<SelectListItem, Guid?, SelectListItem> DriverOptionsWithSelected = new Func<SelectListItem, Guid?, SelectListItem>((d, s) =>
+    {
         return new SelectListItem { Text = d.Text, Value = d.Value, Selected = d.Value == s?.ToString() };
     });
+
+    var teamColors = new Dictionary<string, string>
+    {
+        { "Mercedes", "#6CD3BF" },
+        { "Alpine", "#2293D1" },
+        { "Haas", "#B6BABD" },
+        { "Red Bull Racing", "#3671C6" },
+        { "McLaren", "#F58020" },
+        { "Aston Martin", "#358C75" },
+        { "VCARB", "#5E8FAA" },
+        { "Ferrari", "#F91536" },
+        { "Sauber", "#00E701" },
+        { "Williams", "#37BEDD" }
+    };
 }
+
+<style>
+    option {
+        font-weight: bold;
+    }
+    @foreach (var driver in drivers)
+    {
+        <text>[value="@driver.Id"] { color: @teamColors[driver.Team ?? string.Empty]; }</text>
+    }
+</style>
 
 <h1 class="display-4 mb-3">@e?.Venue.Name (@e?.Venue.Country)</h1>
 <h4 class="mb-4">@e?.GetDateRange()</h4>
@@ -20,7 +51,7 @@
 <hr />
 
 <div class="row">
-    <form asp-action="Event">
+    <form class="narrow" asp-action="Prediction">
         <div asp-validation-summary="All" class="text-danger"></div>
         <input type="hidden" asp-for="UserId" />
         <input type="hidden" asp-for="EventId" />
@@ -30,7 +61,7 @@
                 <div class="row mb-2">
                     <label asp-for="SprintPP" class="col-sm-3 col-form-label"></label>
                     <div class="col-sm-9">
-                        <select asp-for="SprintPP" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.SprintPP))" class="form-control">
+                        <select asp-for="SprintPP" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.SprintPP))" class="form-control" disabled="@isShootOutOver">
                             <option value="">Select...</option>
                         </select>
                     </div>
@@ -39,7 +70,7 @@
                 <div class="row mb-2">
                     <label asp-for="SprintP1" class="col-sm-3 col-form-label"></label>
                     <div class="col-sm-9">
-                        <select asp-for="SprintP1" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.SprintP1))" class="form-control">
+                        <select asp-for="SprintP1" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.SprintP1))" class="form-control" disabled="@isSprintOver">
                             <option value="">Select...</option>
                         </select>
                     </div>
@@ -47,7 +78,7 @@
                 <div class="row">
                     <label asp-for="SprintFL" class="col-sm-3 col-form-label"></label>
                     <div class="col-sm-9">
-                        <select asp-for="SprintFL" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.SprintFL))" class="form-control">
+                        <select asp-for="SprintFL" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.SprintFL))" class="form-control" disabled="@isSprintOver">
                             <option value="">Select...</option>
                         </select>
                     </div>
@@ -60,7 +91,7 @@
                 <div class="row mb-2">
                     <label asp-for="RacePP" class="col-sm-3 col-form-label"></label>
                     <div class="col-sm-9">
-                        <select asp-for="RacePP" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RacePP))" class="form-control">
+                        <select asp-for="RacePP" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RacePP))" class="form-control" disabled="@isQualifcationOver">
                             <option value="">Select...</option>
                         </select>
                     </div>
@@ -69,7 +100,7 @@
                 <div class="row mb-2">
                     <label asp-for="RaceP1" class="col-sm-3 col-form-label"></label>
                     <div class="col-sm-9">
-                        <select asp-for="RaceP1" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceP1))" class="form-control">
+                        <select asp-for="RaceP1" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceP1))" class="form-control" disabled="@isRaceOver">
                             <option value="">Select...</option>
                         </select>
                     </div>
@@ -77,7 +108,7 @@
                 <div class="row mb-2">
                     <label asp-for="RaceP2" class="col-sm-3 col-form-label"></label>
                     <div class="col-sm-9">
-                        <select asp-for="RaceP2" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceP2))" class="form-control">
+                        <select asp-for="RaceP2" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceP2))" class="form-control" disabled="@isRaceOver">
                             <option value="">Select...</option>
                         </select>
                     </div>
@@ -85,7 +116,7 @@
                 <div class="row mb-2">
                     <label asp-for="RaceP3" class="col-sm-3 col-form-label"></label>
                     <div class="col-sm-9">
-                        <select asp-for="RaceP3" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceP3))" class="form-control">
+                        <select asp-for="RaceP3" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceP3))" class="form-control" disabled="@isRaceOver">
                             <option value="">Select...</option>
                         </select>
                     </div>
@@ -94,7 +125,7 @@
                 <div class="row mb-2">
                     <label asp-for="RaceP4" class="col-sm-3 col-form-label"></label>
                     <div class="col-sm-9">
-                        <select asp-for="RaceP4" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceP4))" class="form-control">
+                        <select asp-for="RaceP4" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceP4))" class="form-control" disabled="@isRaceOver">
                             <option value="">Select...</option>
                         </select>
                     </div>
@@ -102,7 +133,7 @@
                 <div class="row mb-2">
                     <label asp-for="RaceP5" class="col-sm-3 col-form-label"></label>
                     <div class="col-sm-9">
-                        <select asp-for="RaceP5" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceP5))" class="form-control">
+                        <select asp-for="RaceP5" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceP5))" class="form-control" disabled="@isRaceOver">
                             <option value="">Select...</option>
                         </select>
                     </div>
@@ -110,7 +141,7 @@
                 <div class="row mb-2">
                     <label asp-for="RaceP6" class="col-sm-3 col-form-label"></label>
                     <div class="col-sm-9">
-                        <select asp-for="RaceP6" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceP6))" class="form-control">
+                        <select asp-for="RaceP6" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceP6))" class="form-control" disabled="@isRaceOver">
                             <option value="">Select...</option>
                         </select>
                     </div>
@@ -118,7 +149,7 @@
                 <div class="row mb-2">
                     <label asp-for="RaceP7" class="col-sm-3 col-form-label"></label>
                     <div class="col-sm-9">
-                        <select asp-for="RaceP7" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceP7))" class="form-control">
+                        <select asp-for="RaceP7" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceP7))" class="form-control" disabled="@isRaceOver">
                             <option value="">Select...</option>
                         </select>
                     </div>
@@ -126,7 +157,7 @@
                 <div class="row mb-2">
                     <label asp-for="RaceP8" class="col-sm-3 col-form-label"></label>
                     <div class="col-sm-9">
-                        <select asp-for="RaceP8" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceP8))" class="form-control">
+                        <select asp-for="RaceP8" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceP8))" class="form-control" disabled="@isRaceOver">
                             <option value="">Select...</option>
                         </select>
                     </div>
@@ -134,7 +165,7 @@
                 <div class="row mb-2">
                     <label asp-for="RaceP9" class="col-sm-3 col-form-label"></label>
                     <div class="col-sm-9">
-                        <select asp-for="RaceP9" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceP9))" class="form-control">
+                        <select asp-for="RaceP9" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceP9))" class="form-control" disabled="@isRaceOver">
                             <option value="">Select...</option>
                         </select>
                     </div>
@@ -142,7 +173,7 @@
                 <div class="row mb-2">
                     <label asp-for="RaceP10" class="col-sm-3 col-form-label"></label>
                     <div class="col-sm-9">
-                        <select asp-for="RaceP10" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceP10))" class="form-control">
+                        <select asp-for="RaceP10" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceP10))" class="form-control" disabled="@isRaceOver">
                             <option value="">Select...</option>
                         </select>
                     </div>
@@ -151,7 +182,7 @@
                 <div class="row mb-2">
                     <label asp-for="RaceFL" class="col-sm-3 col-form-label"></label>
                     <div class="col-sm-9">
-                        <select asp-for="RaceFL" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceFL))" class="form-control">
+                        <select asp-for="RaceFL" asp-items="driverOptions.Select(d => DriverOptionsWithSelected(d, Model.RaceFL))" class="form-control" disabled="@isRaceOver">
                             <option value="">Select...</option>
                         </select>
                     </div>

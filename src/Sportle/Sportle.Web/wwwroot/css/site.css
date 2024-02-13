@@ -25,6 +25,11 @@ a {
     text-decoration: none;
 }
 
+.narrow {
+    margin: auto;
+    max-width: 500px;
+}
+
 .input-validation-error {
     border-color: #ff0000;
 }

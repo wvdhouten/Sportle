@@ -9,16 +9,16 @@ using System.Security.Claims;
 namespace Sportle.Web.Controllers
 {
     [Authorize]
-    public class PredictionsController : SportleBaseController
+    public class EventsController : SportleBaseController
     {
         private readonly SportleDbContext _context;
 
-        public PredictionsController(SportleDbContext context)
+        public EventsController(SportleDbContext context)
         {
             _context = context;
         }
 
-        public async Task<IActionResult> Event(Guid? id)
+        public async Task<IActionResult> Prediction(Guid? id)
         {
             if (id is null)
                 return NotFound();
@@ -42,7 +42,7 @@ namespace Sportle.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Event(Guid? id, EventPrediction2024 model)
+        public async Task<IActionResult> Prediction(Guid? id, EventPrediction2024 model)
         {
             if (id is null)
                 return NotFound();

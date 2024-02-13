@@ -13,11 +13,37 @@
     {
         return new SelectListItem { Text = d.Text, Value = d.Value, Selected = d.Value == s?.ToString() };
     });
+
+    var teamColors = new Dictionary<string, string>
+    {
+        { "Mercedes", "#6CD3BF" },
+        { "Alpine", "#2293D1" },
+        { "Haas", "#B6BABD" },
+        { "Red Bull Racing", "#3671C6" },
+        { "McLaren", "#F58020" },
+        { "Aston Martin", "#358C75" },
+        { "VCARB", "#5E8FAA" },
+        { "Ferrari", "#F91536" },
+        { "Sauber", "#00E701" },
+        { "Williams", "#37BEDD" }
+    };
 }
+
+<style>
+    option {
+        font-weight: bold;
+    }
+    @foreach (var driver in drivers)
+    {
+        <text>[value="@driver.Id"] { color: @teamColors[driver.Team ?? string.Empty]; }</text>
+    }
+</style>
 
 <h1>@e?.Venue.Name (@e?.Venue.Country)</h1>
 <h4>@e?.GetDateRange()</h4>
+
 <hr />
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">

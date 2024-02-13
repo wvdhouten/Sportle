@@ -7,12 +7,12 @@
 <h1>Create League</h1>
 <hr />
 <div class="row">
-    <form asp-action="Create">
+    <form class="narrow" asp-action="Create">
         <div asp-validation-summary="All" class="text-danger"></div>
         <div class="row mb-2">
             <label asp-for="Name" class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9">
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control" autocomplete="off" />
             </div>
         </div>
         <div class="mb-3 text-end">
