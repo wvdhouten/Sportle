@@ -62,7 +62,7 @@ namespace Sportle.Web.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        private static int GetUserScore(SportleDbContext context, IdentityUser user, List<Guid> eventIds)
+        private static double GetUserScore(SportleDbContext context, IdentityUser user, List<Guid> eventIds)
         {
             if (eventIds.Count == 0)
                 return 0;

@@ -63,7 +63,7 @@ namespace Sportle.Web.Models.Formula1
 
         public int SprintBonus { get; set; }
 
-        public int PositionBonus { get; set; }
+        public double PositionBonus { get; set; }
 
         public int PodiumBonus { get; set; }
     }

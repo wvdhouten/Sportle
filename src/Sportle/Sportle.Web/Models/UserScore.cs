@@ -6,6 +6,6 @@ namespace Sportle.Web.Models
     {
         public required IdentityUser User { get; set; }
 
-        public int Score { get; set; }
+        public double Score { get; set; }
     }
 }
