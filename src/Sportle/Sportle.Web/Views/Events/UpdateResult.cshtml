@@ -7,7 +7,7 @@
     var hasSprint = e?.Sessions.Any(s => s.Type == SessionType.Sprint) ?? false;
 
     var drivers = ViewData["Drivers"] as IList<Driver> ?? new List<Driver>();
-    var driverOptions = drivers.OrderBy(d => d.Name).Select(d => new SelectListItem { Text = $"{d.Name} ({d.Number})", Value = d.Id.ToString() });
+    var driverOptions = drivers.Select(d => new SelectListItem { Text = $"{d.Name} ({d.Number})", Value = d.Id.ToString() });
 
     Func<SelectListItem, Guid?, SelectListItem> DriverOptionsWithSelected = new Func<SelectListItem, Guid?, SelectListItem>((d, s) =>
     {
@@ -39,15 +39,15 @@
     }
 </style>
 
-<h1>@e?.Venue.Name (@e?.Venue.Country)</h1>
-<h4>@e?.GetDateRange()</h4>
+<div class="text-center">
 
-<hr />
+    <h1>@e?.Venue.Name (@e?.Venue.Country)</h1>
+    <h4>@e?.GetDateRange()</h4>
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <hr />
+
+    <div class="narrow">
+        <form asp-action="UpdateResult">
             <div asp-validation-summary="All" class="text-danger"></div>
             <input type="hidden" asp-for="EventId" />
             <div class="card mb-3" condition="hasSprint">

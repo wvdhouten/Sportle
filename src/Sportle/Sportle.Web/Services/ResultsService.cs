@@ -41,6 +41,8 @@ namespace Sportle.Web.Services
             {
                 await ProcessPrediction(prediction, result, firstSession, top3, rest10);
             }
+
+            await _dbContext.SaveChangesAsync();
         }
 
         private async Task ProcessPrediction(EventPrediction2024 prediction, EventResult2024 result, DateTime firstSession, List<Guid> top3, List<Guid> rest10)

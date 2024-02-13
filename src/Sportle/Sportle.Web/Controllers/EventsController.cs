@@ -5,6 +5,7 @@ using Sportle.Web.Data;
 using Sportle.Web.Extensions;
 using Sportle.Web.Models;
 using Sportle.Web.Models.Formula1;
+using Sportle.Web.Services;
 using System.Security.Claims;
 
 namespace Sportle.Web.Controllers
@@ -112,7 +113,7 @@ namespace Sportle.Web.Controllers
             return View(model);
         }
 
-        [Authorize("Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateResult(Guid? id)
         {
             if (id is null)
@@ -133,9 +134,9 @@ namespace Sportle.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize("Admin")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateResult(Guid? id, EventResult2024 model)
+        public async Task<IActionResult> UpdateResult([FromServices] ResultsService resultsService, Guid? id, EventResult2024 model)
         {
             if (id is null)
                 return NotFound();
@@ -157,6 +158,8 @@ namespace Sportle.Web.Controllers
 
                     _context.Update(model);
                     await _context.SaveChangesAsync();
+
+                    await resultsService.ProcessResult(id.Value);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -164,6 +167,8 @@ namespace Sportle.Web.Controllers
                     {
                         _context.Add(model);
                         await _context.SaveChangesAsync();
+
+                        await resultsService.ProcessResult(id.Value);
                     }
                     else
                     {
@@ -355,7 +360,7 @@ namespace Sportle.Web.Controllers
             }
 
             if (result.RacePP is null)
-                ModelState.AddModelError(nameof(result.RacePP), "Sprint Pole Position is required.");
+                ModelState.AddModelError(nameof(result.RacePP), "Race Pole Position is required.");
             if (result.RaceP1 is null)
                 ModelState.AddModelError(nameof(result.RaceP1), "Race P1 is required.");
             if (result.RaceP2 is null)

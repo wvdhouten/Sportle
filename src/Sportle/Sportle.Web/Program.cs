@@ -7,6 +7,7 @@ using Sportle.Web.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<StringService>();
+builder.Services.AddScoped<ResultsService>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<SportleDbContext>(options => options.UseSqlServer(connectionString));
