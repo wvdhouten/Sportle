@@ -88,7 +88,7 @@ namespace Sportle.Web.Services
                 prediction.Points += 1;
 
             if (top3.Contains(prediction.RaceP1.Value) && top3.Contains(prediction.RaceP2.Value) && top3.Contains(prediction.RaceP3.Value))
-                prediction.PodiumBonus += 1;
+                prediction.PodiumBonus = 2;
 
             if (top3.Contains(prediction.RaceP1.Value) || rest10.Contains(prediction.RaceP1.Value))
                 prediction.Points += 1;

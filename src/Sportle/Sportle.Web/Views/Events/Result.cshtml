@@ -1,0 +1,160 @@
+﻿@model ResultViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+    var hasSprint = Model.Event.Sessions.Any(s => s.Type == SessionType.Sprint);
+}
+
+<div class="text-center">
+
+    <h1 class="display-4 mb-3">@Model.Event.Venue.Name (@Model.Event.Venue.Country)</h1>
+    <h4 class="mb-4">@Model.Event.GetDateRange()</h4>
+
+    <hr />
+
+    <div class="row">
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Result</th>
+                    <th scope="col">Prediction</th>
+                    <th scope="col">Points</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row" class="text-start"><span>Early Bonus</span></th>
+                    <td></td>
+                    <td></td>
+                    <td>@Model.Prediction?.EarlyBonus</td>
+                </tr>
+                <tr condition="hasSprint">
+                    <th scope="row" class="text-start"><span>Sprint Pole</span></th>
+                    <td>@Model.GetDriverName(Model.Result.SprintPP)</td>
+                    <td>@Model.GetDriverName(Model.Prediction?.SprintPP)</td>
+                    <td>@(Model.Result.SprintPP == Model.Prediction?.SprintPP ? 1 : 0)</td>
+                </tr>
+                <tr condition="hasSprint">
+                    <th scope="row" class="text-start"><span>Sprint P1</span></th>
+                    <td>@Model.GetDriverName(Model.Result.SprintP1)</td>
+                    <td>@Model.GetDriverName(Model.Prediction?.SprintP1)</td>
+                    <td>@(Model.Result.SprintP1 == Model.Prediction?.SprintP1 ? 1 : 0)</td>
+                </tr>
+                <tr condition="hasSprint">
+                    <th scope="row" class="text-start"><span>Sprint Fastest Lap</span></th>
+                    <td>@Model.GetDriverName(Model.Result.SprintFL)</td>
+                    <td>@Model.GetDriverName(Model.Prediction?.SprintFL)</td>
+                    <td>@(Model.Result.SprintFL == Model.Prediction?.SprintFL ? 1 : 0)</td>
+                </tr>
+                <tr condition="hasSprint">
+                    <th scope="row" class="text-start"><span>Sprint Bonus</span></th>
+                    <td></td>
+                    <td></td>
+                    <td>@Model.Prediction?.SprintBonus</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="text-start"><span>Race Pole</span></th>
+                    <td>@Model.GetDriverName(Model.Result.RacePP)</td>
+                    <td>@Model.GetDriverName(Model.Prediction?.RacePP)</td>
+                    <td>@(Model.Result.RacePP == Model.Prediction?.RacePP ? 1 : 0)</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="text-start"><span>Race P1</span></th>
+                    <td>@Model.GetDriverName(Model.Result.RaceP1)</td>
+                    <td>@Model.GetDriverName(Model.Prediction?.RaceP1)</td>
+                    <td>@(Model.Top10.Contains(Model.Prediction.RaceP1.Value) ? 1 : 0)</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="text-start"><span>Race P2</span></th>
+                    <td>@Model.GetDriverName(Model.Result.RaceP2)</td>
+                    <td>@Model.GetDriverName(Model.Prediction?.RaceP2)</td>
+                    <td>@(Model.Top10.Contains(Model.Prediction.RaceP2.Value) ? 1 : 0)</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="text-start"><span>Race P3</span></th>
+                    <td>@Model.GetDriverName(Model.Result.RaceP3)</td>
+                    <td>@Model.GetDriverName(Model.Prediction?.RaceP3)</td>
+                    <td>@(Model.Top10.Contains(Model.Prediction.RaceP3.Value) ? 1 : 0)</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="text-start"><span>Podium Bonus</span></th>
+                    <td></td>
+                    <td></td>
+                    <td>@Model.Prediction?.PodiumBonus</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="text-start"><span>Race P4</span></th>
+                    <td>@Model.GetDriverName(Model.Result.RaceP4)</td>
+                    <td>@Model.GetDriverName(Model.Prediction?.RaceP4)</td>
+                    <td>@(Model.Top10.Contains(Model.Prediction.RaceP4.Value) ? 1 : 0)</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="text-start"><span>Race P5</span></th>
+                    <td>@Model.GetDriverName(Model.Result.RaceP5)</td>
+                    <td>@Model.GetDriverName(Model.Prediction?.RaceP5)</td>
+                    <td>@(Model.Top10.Contains(Model.Prediction.RaceP5.Value) ? 1 : 0)</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="text-start"<span>Race P6</span></th>
+                    <td>@Model.GetDriverName(Model.Result.RaceP6)</td>
+                    <td>@Model.GetDriverName(Model.Prediction?.RaceP6)</td>
+                    <td>@(Model.Top10.Contains(Model.Prediction.RaceP6.Value) ? 1 : 0)</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="text-start"><span>Race P7</span></th>
+                    <td>@Model.GetDriverName(Model.Result.RaceP7)</td>
+                    <td>@Model.GetDriverName(Model.Prediction?.RaceP7)</td>
+                    <td>@(Model.Top10.Contains(Model.Prediction.RaceP7.Value) ? 1 : 0)</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="text-start"><span>Race P8</span></th>
+                    <td>@Model.GetDriverName(Model.Result.RaceP8)</td>
+                    <td>@Model.GetDriverName(Model.Prediction?.RaceP8)</td>
+                    <td>@(Model.Top10.Contains(Model.Prediction.RaceP8.Value) ? 1 : 0)</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="text-start"><span>Race P9</span></th>
+                    <td>@Model.GetDriverName(Model.Result.RaceP9)</td>
+                    <td>@Model.GetDriverName(Model.Prediction?.RaceP9)</td>
+                    <td>@(Model.Top10.Contains(Model.Prediction.RaceP9.Value) ? 1 : 0)</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="text-start"><span>Race P10</span></th>
+                    <td>@Model.GetDriverName(Model.Result.RaceP10)</td>
+                    <td>@Model.GetDriverName(Model.Prediction?.RaceP10)</td>
+                    <td>@(Model.Top10.Contains(Model.Prediction.RaceP10.Value) ? 1 : 0)</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="text-start"><span>Position Bonus</span></th>
+                    <td></td>
+                    <td></td>
+                    <td>@Model.Prediction?.PositionBonus</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="text-start"><span>Race Fastest Lap</span></th>
+                    <td>@Model.GetDriverName(Model.Result.RaceFL)</td>
+                    <td>@Model.GetDriverName(Model.Prediction?.RaceFL)</td>
+                    <td>@(Model.Result.RaceFL == Model.Prediction?.RaceFL ? 1 : 0)</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="text-start"><span>Total</span></th>
+                    <td></td>
+                    <td></td>
+                    <td>@Model.Prediction.GetTotalPoints()</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<div>
+    <a asp-controller="Home" asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

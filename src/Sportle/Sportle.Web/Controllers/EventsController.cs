@@ -6,7 +6,6 @@ using Sportle.Web.Extensions;
 using Sportle.Web.Models;
 using Sportle.Web.Models.Formula1;
 using Sportle.Web.Services;
-using System.Security.Claims;
 
 namespace Sportle.Web.Controllers
 {
@@ -49,7 +48,7 @@ namespace Sportle.Web.Controllers
             if (@event is null)
                 return NotFound();
 
-            if (!Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId))
+            if (!User.HasId(out var userId))
                 return NotFound();
 
             var prediction = await _context.Predictions2024.FirstOrDefaultAsync(p => p.EventId == id && p.UserId == userId) ?? new EventPrediction2024 { EventId = id.Value, UserId = userId };
@@ -109,6 +108,41 @@ namespace Sportle.Web.Controllers
 
             ViewData["Event"] = @event;
             ViewData["Drivers"] = drivers;
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> Result(Guid? id, Guid? userId)
+        {
+            if (id is null)
+                return NotFound();
+
+            var @event = _context.Events.FirstOrDefault(e => e.Id == id);
+            if (@event is null)
+                return NotFound();
+
+            var result = await _context.Results2024.FirstOrDefaultAsync(p => p.EventId == id);
+            if (result is null)
+                return NotFound();
+
+            if (userId is null)
+            {
+                _ = User.HasId(out var currentUserId);
+                userId = currentUserId;
+            }
+            var prediction = await _context.Predictions2024.FirstOrDefaultAsync(p => p.EventId == id && p.UserId == userId);
+
+            var drivers = _context.Drivers.ToList();
+
+            var model = new ResultViewModel
+            {
+                Event = @event,
+                Result = result,
+                Prediction = prediction,
+                Drivers = drivers.ToDictionary(d => d.Id, d => d.Name),
+                Top10 = { result.RaceP1.Value, result.RaceP2.Value, result.RaceP3.Value, result.RaceP4.Value, result.RaceP5.Value,
+                result.RaceP6.Value, result.RaceP7.Value, result.RaceP8.Value, result.RaceP9.Value, result.RaceP10.Value, }
+            };
 
             return View(model);
         }
