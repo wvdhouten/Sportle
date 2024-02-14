@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Sportle.Web.Extensions;
+using System.ComponentModel;
 
 namespace Sportle.Web.Models.Formula1
 {
@@ -54,5 +55,21 @@ namespace Sportle.Web.Models.Formula1
 
         [DisplayName("Fastest Lap")]
         public Guid? RaceFL { get; set; }
+
+        public List<Guid> GetTop10()
+        {
+            var result = new List<Guid>();
+            if (RaceP1 is not null) result.Add(RaceP1.Value);
+            if (RaceP2 is not null) result.Add(RaceP2.Value);
+            if (RaceP3 is not null) result.Add(RaceP3.Value);
+            if (RaceP4 is not null) result.Add(RaceP4.Value);
+            if (RaceP5 is not null) result.Add(RaceP5.Value);
+            if (RaceP6 is not null) result.Add(RaceP6.Value);
+            if (RaceP7 is not null) result.Add(RaceP7.Value);
+            if (RaceP8 is not null) result.Add(RaceP8.Value);
+            if (RaceP9 is not null) result.Add(RaceP9.Value);
+            if (RaceP10 is not null) result.Add(RaceP10.Value);
+            return result;
+        }
     }
 }

@@ -140,8 +140,7 @@ namespace Sportle.Web.Controllers
                 Result = result,
                 Prediction = prediction,
                 Drivers = drivers.ToDictionary(d => d.Id, d => d.Name),
-                Top10 = { result.RaceP1.Value, result.RaceP2.Value, result.RaceP3.Value, result.RaceP4.Value, result.RaceP5.Value,
-                result.RaceP6.Value, result.RaceP7.Value, result.RaceP8.Value, result.RaceP9.Value, result.RaceP10.Value, }
+                Top10 = result.GetTop10()
             };
 
             return View(model);

@@ -63,19 +63,19 @@
                     <th scope="row" class="text-start"><span>Race P1</span></th>
                     <td>@Model.GetDriverName(Model.Result.RaceP1)</td>
                     <td>@Model.GetDriverName(Model.Prediction?.RaceP1)</td>
-                    <td>@(Model.Top10.Contains(Model.Prediction.RaceP1.Value) ? 1 : 0)</td>
+                    <td>@(Model.IsInTop10(Model.Prediction?.RaceP1) ? 1 : 0)</td>
                 </tr>
                 <tr>
                     <th scope="row" class="text-start"><span>Race P2</span></th>
                     <td>@Model.GetDriverName(Model.Result.RaceP2)</td>
                     <td>@Model.GetDriverName(Model.Prediction?.RaceP2)</td>
-                    <td>@(Model.Top10.Contains(Model.Prediction.RaceP2.Value) ? 1 : 0)</td>
+                    <td>@(Model.IsInTop10(Model.Prediction?.RaceP2) ? 1 : 0)</td>
                 </tr>
                 <tr>
                     <th scope="row" class="text-start"><span>Race P3</span></th>
                     <td>@Model.GetDriverName(Model.Result.RaceP3)</td>
                     <td>@Model.GetDriverName(Model.Prediction?.RaceP3)</td>
-                    <td>@(Model.Top10.Contains(Model.Prediction.RaceP3.Value) ? 1 : 0)</td>
+                    <td>@(Model.IsInTop10(Model.Prediction?.RaceP3) ? 1 : 0)</td>
                 </tr>
                 <tr>
                     <th scope="row" class="text-start"><span>Podium Bonus</span></th>
@@ -87,43 +87,43 @@
                     <th scope="row" class="text-start"><span>Race P4</span></th>
                     <td>@Model.GetDriverName(Model.Result.RaceP4)</td>
                     <td>@Model.GetDriverName(Model.Prediction?.RaceP4)</td>
-                    <td>@(Model.Top10.Contains(Model.Prediction.RaceP4.Value) ? 1 : 0)</td>
+                    <td>@(Model.IsInTop10(Model.Prediction?.RaceP4) ? 1 : 0)</td>
                 </tr>
                 <tr>
                     <th scope="row" class="text-start"><span>Race P5</span></th>
                     <td>@Model.GetDriverName(Model.Result.RaceP5)</td>
                     <td>@Model.GetDriverName(Model.Prediction?.RaceP5)</td>
-                    <td>@(Model.Top10.Contains(Model.Prediction.RaceP5.Value) ? 1 : 0)</td>
+                    <td>@(Model.IsInTop10(Model.Prediction?.RaceP5) ? 1 : 0)</td>
                 </tr>
                 <tr>
                     <th scope="row" class="text-start"><span>Race P6</span></th>
                     <td>@Model.GetDriverName(Model.Result.RaceP6)</td>
                     <td>@Model.GetDriverName(Model.Prediction?.RaceP6)</td>
-                    <td>@(Model.Top10.Contains(Model.Prediction.RaceP6.Value) ? 1 : 0)</td>
+                    <td>@(Model.IsInTop10(Model.Prediction?.RaceP6) ? 1 : 0)</td>
                 </tr>
                 <tr>
                     <th scope="row" class="text-start"><span>Race P7</span></th>
                     <td>@Model.GetDriverName(Model.Result.RaceP7)</td>
                     <td>@Model.GetDriverName(Model.Prediction?.RaceP7)</td>
-                    <td>@(Model.Top10.Contains(Model.Prediction.RaceP7.Value) ? 1 : 0)</td>
+                    <td>@(Model.IsInTop10(Model.Prediction?.RaceP7) ? 1 : 0)</td>
                 </tr>
                 <tr>
                     <th scope="row" class="text-start"><span>Race P8</span></th>
                     <td>@Model.GetDriverName(Model.Result.RaceP8)</td>
                     <td>@Model.GetDriverName(Model.Prediction?.RaceP8)</td>
-                    <td>@(Model.Top10.Contains(Model.Prediction.RaceP8.Value) ? 1 : 0)</td>
+                    <td>@(Model.IsInTop10(Model.Prediction?.RaceP8) ? 1 : 0)</td>
                 </tr>
                 <tr>
                     <th scope="row" class="text-start"><span>Race P9</span></th>
                     <td>@Model.GetDriverName(Model.Result.RaceP9)</td>
                     <td>@Model.GetDriverName(Model.Prediction?.RaceP9)</td>
-                    <td>@(Model.Top10.Contains(Model.Prediction.RaceP9.Value) ? 1 : 0)</td>
+                    <td>@(Model.IsInTop10(Model.Prediction?.RaceP9) ? 1 : 0)</td>
                 </tr>
                 <tr>
                     <th scope="row" class="text-start"><span>Race P10</span></th>
                     <td>@Model.GetDriverName(Model.Result.RaceP10)</td>
                     <td>@Model.GetDriverName(Model.Prediction?.RaceP10)</td>
-                    <td>@(Model.Top10.Contains(Model.Prediction.RaceP10.Value) ? 1 : 0)</td>
+                    <td>@(Model.IsInTop10(Model.Prediction?.RaceP10) ? 1 : 0)</td>
                 </tr>
                 <tr>
                     <th scope="row" class="text-start"><span>Position Bonus</span></th>

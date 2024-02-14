@@ -27,7 +27,6 @@
 
   <ItemGroup>
     <Folder Include="Areas\Admin\Models\" />
-    <Folder Include="Areas\Admin\Views\Results\" />
     <Folder Include="Identity\" />
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>

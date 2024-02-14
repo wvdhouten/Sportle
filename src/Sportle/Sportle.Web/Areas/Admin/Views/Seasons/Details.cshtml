@@ -38,7 +38,6 @@
                 @foreach (var e in Model.Events)
                 {
                     <tr>
-                        <td><a asp-area="Admin" asp-controller="Results" asp-action="Edit" asp-route-id="@e.Id">🏁</a></td>
                         <td>@e.Venue.Name</td>
                         <td>@e.Venue.Country</td>
                         <td>@(e.Sessions.FirstOrDefault(s => s.Type == SessionType.Race)?.Start.ToString("d MMMM") ?? "")</td>

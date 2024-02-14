@@ -42,7 +42,7 @@ namespace Sportle.Web.Controllers
                 model.NextPrediction = _context.Predictions2024.FirstOrDefault(p => p.UserId == userId && p.EventId == model.NextEvent.Id);
 
             if (model.PrevEvent != null)
-                model.PrevPrediction = _context.Predictions2024.FirstOrDefault(p => p.UserId == userId && p.EventId == model.NextEvent.Id);
+                model.PrevPrediction = _context.Predictions2024.FirstOrDefault(p => p.UserId == userId && p.EventId == model.PrevEvent.Id);
 
             return View(model);
         }

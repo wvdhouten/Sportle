@@ -14,6 +14,14 @@ namespace Sportle.Web.Models
 
         public List<Guid> Top10 { get; set; } = [];
 
+        public bool IsInTop10(Guid? guid)
+        {
+            if (guid is null)
+                return false;
+
+            return Top10.Contains(guid.Value);
+        }
+
         public string GetDriverName(Guid? guid)
         {
             if (guid is null)
