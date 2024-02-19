@@ -1,0 +1,28 @@
+﻿@model UserScoreViewModel
+@{
+    ViewData["Title"] = $"Score: {Model.User.UserName}";
+    var now = DateTime.UtcNow;
+}
+
+<div class="text-center">
+    <h1 class="display-4 mb-3">@Model.User.UserName</h1>
+    <h4 class="mb-4">@Model.Predictions.Sum(p => p.GetTotalPoints())</h4>
+
+    <hr />
+
+    <ul class="list-group top narrow">
+        @foreach (var e in Model.Events)
+        {
+            var isInPast = e.Sessions.First(s => s.Type == SessionType.Race).Start < now;
+            var prediction = Model.Predictions.FirstOrDefault(p => p.EventId == e.Id);
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span class="venue">@e?.Venue.Name (@e?.Venue.Country), @e?.GetDateRange()</span>
+                <span class="score">
+                    <span condition="prediction is null">⚠️</span>
+                    <span condition="prediction is not null && !isInPast">✅</span>
+                    <span condition="prediction is not null && isInPast">@prediction.GetTotalPoints()</span>
+                </span>
+            </li>
+        }
+    </ul>
+</div>

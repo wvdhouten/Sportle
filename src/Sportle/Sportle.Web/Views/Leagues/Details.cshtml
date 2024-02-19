@@ -8,7 +8,7 @@
     <h1 class="display-4 mb-3">Leaderboard</h1>
     <h4 class="mb-4">@Model.League.Name | F1 Season 2024</h4>
 
-    <h6>Code: <a id="league-code" href="@Url.Action("Join", "Leagues", new { Code = Model.League?.Code }, Context.Request.Scheme)">@Model.League?.Code</a><span class="copy" onclick="copyCode()">📄</span></h6>
+    <h6>Code: <a id="league-code" url="@Url.Action("Join", "Leagues", new { Code = Model.League?.Code }, Context.Request.Scheme)">@Model.League?.Code</a><span class="copy" onclick="copyCode()">📄</span></h6>
 
     <a asp-action="Events" asp-route-id="@Model.League?.Id">Events</a>
 
@@ -20,7 +20,7 @@
             position++;
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 <span class="position">@position</span>
-                <span class="name">@userScore.User.UserName</span>
+                <a asp-controller="Scores" asp-action="User" asp-route-id="@userScore.User.Id" class="name">@userScore.User.UserName</a>
                 <span class="badge rounded-pill">@userScore.Score</span>
             </li>
         }
@@ -29,7 +29,7 @@
 
 <script>
     function copyCode() {
-        const codeUrl = document.getElementById('league-code').getAttribute('href');
+        const codeUrl = document.getElementById('league-code').getAttribute('url');
         if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
             const result = navigator.clipboard.writeText(codeUrl);
             alert('League invitation link copied to clipboard.');

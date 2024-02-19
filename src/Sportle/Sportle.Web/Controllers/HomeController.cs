@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Sportle.Web.Data;
 using Sportle.Web.Extensions;
@@ -47,14 +46,7 @@ namespace Sportle.Web.Controllers
             return View(model);
         }
 
-        public IActionResult Leaderboard()
-        {
-            var events = _context.Seasons.FirstOrDefault(s => s.Year == 2024)?.Events.Select(e => e.Id).ToList() ?? [];
-
-            var userScores = _context.Users.Select(u => new UserScore { User = u, Score = GetUserScore(_context, u, events) }).ToList();
-
-            return View(userScores);
-        }
+        
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -62,16 +54,6 @@ namespace Sportle.Web.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        private static double GetUserScore(SportleDbContext context, IdentityUser user, List<Guid> eventIds)
-        {
-            if (eventIds.Count == 0)
-                return 0;
 
-            if (!Guid.TryParse(user.Id, out var userId))
-                return 0;
-
-            var predictions = context.Predictions2024.Where(p => eventIds.Contains(p.EventId) && p.UserId == userId);
-            return predictions.Sum(p => p.Points + p.EarlyBonus + p.SprintBonus + p.PodiumBonus + p.PositionBonus);
-        }
     }
 }
