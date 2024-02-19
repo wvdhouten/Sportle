@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 
 **/Sportle.Web/wwwroot/lib
+**/Sportle.Web/Content
