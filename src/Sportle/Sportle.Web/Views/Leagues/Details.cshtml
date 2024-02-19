@@ -7,7 +7,9 @@
 <div class="text-center">
     <h1 class="display-4 mb-3">Leaderboard</h1>
     <h4 class="mb-4">@Model.League.Name | F1 Season 2024</h4>
-    <h6>Code: @Model.League?.Code</h6>
+
+    <h6>Code: <a id="league-code" href="@Url.Action("Join", "Leagues", new { Code = Model.League?.Code }, Context.Request.Scheme)">@Model.League?.Code</a><span class="copy" onclick="copyCode()">📄</span></h6>
+
     <a asp-action="Events" asp-route-id="@Model.League?.Id">Events</a>
 
     <hr />
@@ -24,3 +26,15 @@
         }
     </ul>
 </div>
+
+<script>
+    function copyCode() {
+        const codeUrl = document.getElementById('league-code').getAttribute('href');
+        if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
+            const result = navigator.clipboard.writeText(codeUrl);
+            alert('League invitation link copied to clipboard.');
+            return result;
+        }
+        return Promise.reject('The Clipboard API is not available.');
+    };
+</script>

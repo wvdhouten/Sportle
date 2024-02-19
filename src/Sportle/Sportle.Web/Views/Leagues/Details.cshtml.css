@@ -14,3 +14,7 @@
 .top li:nth-child(3) .badge {
     background-color: #CD7F32;
 }
+
+.copy {
+    cursor: pointer;
+}

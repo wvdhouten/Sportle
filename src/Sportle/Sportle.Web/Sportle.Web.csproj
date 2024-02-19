@@ -1,34 +1,36 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>aspnet-Sportle.Web-81c9e036-1237-44a1-a3de-fdc7ec6ae75e</UserSecretsId>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>aspnet-Sportle.Web-81c9e036-1237-44a1-a3de-fdc7ec6ae75e</UserSecretsId>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="8.0.0" />
-    <PackageReference Include="AspNet.Security.OAuth.Yahoo" Version="8.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="8.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="8.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="8.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="8.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="8.0.0" />
+        <PackageReference Include="AspNet.Security.OAuth.Yahoo" Version="8.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="8.0.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="8.0.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="8.0.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="8.0.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Cosmos" Version="8.0.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.2">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.1" />
+        <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Areas\Admin\Models\" />
-    <Folder Include="Identity\" />
-    <Folder Include="Properties\PublishProfiles\" />
-  </ItemGroup>
-
+    <ItemGroup>
+        <Folder Include="Content\Files\" />
+        <Folder Include="Data\Migrations\" />
+        <Folder Include="Identity\" />
+    </ItemGroup>
 </Project>

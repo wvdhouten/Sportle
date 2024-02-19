@@ -3,18 +3,28 @@ using Microsoft.EntityFrameworkCore;
 using Sportle.Web.Data;
 using Sportle.Web.Extensions;
 using Sportle.Web.Services;
+using Sportle.Web.Services.Abstractions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<StringService>();
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("SmtpSettings"));
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ResultsService>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<SportleDbContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<SportleDbContext>(options =>
+{
+    Directory.CreateDirectory($"{builder.Environment.ContentRootPath}\\Content");
+    options.UseSqlite(connectionString.Replace("{ContentPath}", $"{builder.Environment.ContentRootPath}\\Content"));
+});
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services
-    .AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddDefaultIdentity<IdentityUser>(options =>
+    {
+        options.SignIn.RequireConfirmedAccount = true;
+    })
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<SportleDbContext>();
 

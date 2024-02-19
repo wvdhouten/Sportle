@@ -53,7 +53,7 @@ namespace Sportle.Web.Controllers
 
             var prediction = await _context.Predictions2024.FirstOrDefaultAsync(p => p.EventId == id && p.UserId == userId) ?? new EventPrediction2024 { EventId = id.Value, UserId = userId };
 
-            var drivers = _context.Drivers.ToList();
+            var drivers = _context.Drivers.OrderBy(d => d.Team).ToList();
 
             ViewData["Event"] = @event;
             ViewData["Drivers"] = drivers;
@@ -104,7 +104,7 @@ namespace Sportle.Web.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            var drivers = _context.Drivers.ToList();
+            var drivers = _context.Drivers.OrderBy(d => d.Team).ToList();
 
             ViewData["Event"] = @event;
             ViewData["Drivers"] = drivers;
@@ -132,7 +132,7 @@ namespace Sportle.Web.Controllers
             }
             var prediction = await _context.Predictions2024.FirstOrDefaultAsync(p => p.EventId == id && p.UserId == userId);
 
-            var drivers = _context.Drivers.ToList();
+            var drivers = _context.Drivers.OrderBy(d => d.Team).ToList();
 
             var model = new ResultViewModel
             {
@@ -158,7 +158,7 @@ namespace Sportle.Web.Controllers
 
             var eventResult2024 = await _context.Results2024.FirstOrDefaultAsync(r => r.Id == id) ?? new EventResult2024 { EventId = id.Value };
 
-            var drivers = _context.Drivers.ToList();
+            var drivers = _context.Drivers.OrderBy(d => d.Team).ToList();
 
             ViewData["Event"] = @event;
             ViewData["Drivers"] = drivers;
@@ -211,7 +211,7 @@ namespace Sportle.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var drivers = _context.Drivers.ToList();
+            var drivers = _context.Drivers.OrderBy(d => d.Team).ToList();
 
             ViewData["Event"] = @event;
             ViewData["Drivers"] = drivers;
