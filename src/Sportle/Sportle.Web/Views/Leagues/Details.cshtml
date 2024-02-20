@@ -32,8 +32,7 @@
         const codeUrl = document.getElementById('league-code').getAttribute('url');
         if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
             const result = navigator.clipboard.writeText(codeUrl);
-            alert('League invitation link copied to clipboard.');
-            return result;
+            return result.then(() => alert('League invitation link copied to clipboard.'));
         }
         return Promise.reject('The Clipboard API is not available.');
     };
