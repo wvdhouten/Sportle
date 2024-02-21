@@ -23,8 +23,8 @@
                     <p condition="@(!hasPrediction && !isInPast)">⚠️ Not yet predicted ⚠️</p>
                     <p condition="@(hasPrediction && !isInPast)">✅ Prediction submitted ✅</p>
                     <span condition="@(!hasPrediction && isInPast)">❌ Nothing predicted ❌</span>
-                    <a asp-area="" asp-controller="Leagues" asp-action="EventDetails" asp-route-id="@Model.League?.Id" asp-route-eventId="@e.Id" class="btn btn-primary btn-sm">Details</a>
-                    <a condition="@(!isInPast)" asp-area="" asp-controller="Predictions" asp-action="Index" asp-route-id="@e.Id" class="btn btn-primary btn-sm">Predict</a>
+                    @* <a asp-area="" asp-controller="Leagues" asp-action="EventDetails" asp-route-id="@Model.League?.Id" asp-route-eventId="@e.Id" class="btn btn-primary btn-sm">Details</a> *@
+                    <a condition="@(!isInPast)" asp-area="" asp-controller="Events" asp-action="Prediction" asp-route-id="@e.Id" class="btn btn-primary btn-sm">Predict</a>
                     <a condition="@(hasPrediction && isInPast)" asp-area="" asp-controller="Predictions" asp-action="Result" asp-route-id="@e.Id" class="btn btn-primary btn-sm">Results</a>
                 </div>
             </div>
