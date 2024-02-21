@@ -1,24 +1,32 @@
-﻿@model AdminsViewModel
+﻿@model LeagueAssignViewModel
 @{
-    ViewData["Title"] = "Admins";
+    ViewData["Title"] = "League Assignment";
 }
 
 <div class="text-center">
-    <h1 class="display-4 mb-3">Admins</h1>
+    <h1 class="display-4 mb-3">League Assignment</h1>
 
     <hr />
 
     <ul class="list-group top narrow">
-        @foreach (var admin in Model.Admins)
+        @foreach (var league in Model.Leagues)
         {
             <li class="list-group-item d-flex justify-content-between align-items-center">
-                <span class="position">@admin.UserName</span>
+                <a asp-area="" asp-controller="Leagues" asp-action="Details" asp-route-id="@league.Id">@league.Name</a>
             </li>
         }
     </ul>
 
-    <form asp-action="Index" class="narrow">
+    <form asp-action="Assign" class="narrow">
         <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="row mb-2">
+            <label asp-for="LeagueId" class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9">
+                <select asp-for="LeagueId" asp-items="Model.Leagues.Select(l => new SelectListItem{ Text = l.Name, Value = l.Id.ToString() })" class="form-control">
+                    <option value="">Select...</option>
+                </select>
+            </div>
+        </div>
         <div class="row mb-2">
             <label asp-for="UserId" class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9">
