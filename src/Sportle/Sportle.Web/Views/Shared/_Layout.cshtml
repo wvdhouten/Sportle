@@ -28,7 +28,7 @@
                             <a class="nav-link" asp-area="" asp-controller="Leagues" asp-action="Index">Leagues</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="Admin" asp-controller="Home" asp-action="Index">Admin</a>
+                            <a class="nav-link" asp-area="Admin" asp-controller="Home" asp-action="Index" condition="@User.IsInRole("Admin")">Admin</a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />

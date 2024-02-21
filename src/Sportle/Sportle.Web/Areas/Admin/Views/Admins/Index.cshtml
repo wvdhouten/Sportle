@@ -1,0 +1,35 @@
+﻿@model AdminsViewModel
+@{
+    ViewData["Title"] = "Admins";
+}
+
+<div class="text-center">
+    <h1 class="display-4 mb-3">Admins</h1>
+
+    <hr />
+
+    <ul class="list-group top narrow">
+        @foreach (var admin in Model.Admins)
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span class="position">@admin.UserName</span>
+            </li>
+        }
+    </ul>
+
+    <form asp-action="Index">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="row mb-2">
+            <label asp-for="UserId" class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9">
+                <select asp-for="UserId" asp-items="Model.Users.Select(u => new SelectListItem{ Text = u.UserName, Value = u.Id })" class="form-control">
+                    <option value="">Select...</option>
+                </select>
+            </div>
+        </div>
+        <div class="mb-3 text-end">
+            <input type="submit" asp-for="Action" value="Add" class="btn btn-primary" />
+            <input type="submit" asp-for="Action" value="Remove" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
