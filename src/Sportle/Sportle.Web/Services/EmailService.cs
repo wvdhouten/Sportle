@@ -8,28 +8,25 @@ namespace Sportle.Web.Services
     public class EmailService : IEmailService
     {
         private readonly EmailSettings _settings;
+        private readonly IEmailRenderer _renderer;
 
-        public EmailService(IOptionsSnapshot<EmailSettings> options)
+        public EmailService(IOptionsSnapshot<EmailSettings> options, IEmailRenderer renderer)
         {
             _settings = options.Value;
+            _renderer = renderer;
         }
 
-        public async Task SendEmailAsync(string recipient, string subject, string body)
+        public async Task SendEmailAsync<T>(string recipient, string subject, T model)
         {
-            try
-            {
-                using var client = GetClient();
-                var mailMessage = new MailMessage(_settings.Sender ?? string.Empty, recipient, subject, body)
-                {
-                    IsBodyHtml = true
-                };
+            var htmlBody = await _renderer.Render(typeof(T).Name, model);
 
-                await client.SendMailAsync(mailMessage);
-            }
-            catch
+            using var client = GetClient();
+            var mailMessage = new MailMessage(_settings.Sender, recipient, subject, htmlBody)
             {
-                // Swallowed. Tried and failed.
-            }
+                IsBodyHtml = true,
+            };
+
+            await client.SendMailAsync(mailMessage);
         }
 
         private SmtpClient GetClient()

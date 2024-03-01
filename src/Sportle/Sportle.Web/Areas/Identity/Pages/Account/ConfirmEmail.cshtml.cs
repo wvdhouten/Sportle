@@ -34,7 +34,7 @@ namespace Sportle.Web.Areas.Identity.Pages.Account
         {
             if (userId == null || code == null)
             {
-                return RedirectToPage("/Index");
+                return RedirectToAction("Index", "Home", new { Area = "" });
             }
 
             var user = await _userManager.FindByIdAsync(userId);

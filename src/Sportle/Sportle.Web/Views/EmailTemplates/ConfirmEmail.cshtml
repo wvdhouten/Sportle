@@ -1,0 +1,9 @@
+@using System.Text.Encodings.Web
+
+@model ConfirmEmail
+@{
+  Layout = "_Layout.cshtml";
+}
+
+<p>A Sportle account has been registered with your email.</p>
+<p>You can confirm this account/email by <a href="@HtmlEncoder.Default.Encode(Model.CallbackUrl)">clicking here</a>.</p>
