@@ -10,6 +10,7 @@ using Sportle.Web.Services;
 namespace Sportle.Web.Controllers
 {
     [Authorize]
+    [Route("Events")]
     public class EventsController : SportleBaseController
     {
         private readonly SportleDbContext _context;
@@ -39,6 +40,7 @@ namespace Sportle.Web.Controllers
             return View(model);
         }
 
+        [HttpGet("{id}/Prediction")]
         public async Task<IActionResult> Prediction(Guid? id)
         {
             if (id is null)
@@ -61,7 +63,7 @@ namespace Sportle.Web.Controllers
             return View(prediction);
         }
 
-        [HttpPost]
+        [HttpPost("{id}/Prediction")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Prediction(Guid? id, EventPrediction2024 model)
         {
@@ -112,6 +114,7 @@ namespace Sportle.Web.Controllers
             return View(model);
         }
 
+        [HttpGet("{id}/Result")]
         public async Task<IActionResult> Result(Guid? id, Guid? userId)
         {
             if (id is null)
@@ -125,12 +128,11 @@ namespace Sportle.Web.Controllers
             if (result is null)
                 return NotFound();
 
-            if (userId is null)
-            {
-                _ = User.HasId(out var currentUserId);
-                userId = currentUserId;
-            }
-            var prediction = await _context.Predictions2024.FirstOrDefaultAsync(p => p.EventId == id && p.UserId == userId);
+            _ = User.HasId(out var currentUserId);
+            var ownPrediction = await _context.Predictions2024.FirstOrDefaultAsync(p => p.EventId == id && p.UserId == currentUserId);
+
+            var compareUser = (userId is not null) ? await _context.Users.FirstOrDefaultAsync(p => p.Id == userId.ToString()) : null;
+            var comparePrediction = (userId is not null) ? await _context.Predictions2024.FirstOrDefaultAsync(p => p.EventId == id && p.UserId == userId) : null;
 
             var drivers = _context.Drivers.OrderBy(d => d.Team).ToList();
 
@@ -138,7 +140,9 @@ namespace Sportle.Web.Controllers
             {
                 Event = @event,
                 Result = result,
-                Prediction = prediction,
+                OwnPrediction = ownPrediction,
+                CompareUser = compareUser,
+                ComparePrediction = comparePrediction,
                 Drivers = drivers.ToDictionary(d => d.Id, d => d.Name),
                 Top10 = result.GetTop10()
             };
@@ -147,6 +151,7 @@ namespace Sportle.Web.Controllers
         }
 
         [Authorize(Roles = "Admin")]
+        [HttpGet("{id}/UpdateResult")]
         public async Task<IActionResult> UpdateResult(Guid? id)
         {
             if (id is null)
@@ -166,8 +171,8 @@ namespace Sportle.Web.Controllers
             return View(eventResult2024);
         }
 
-        [HttpPost]
         [Authorize(Roles = "Admin")]
+        [HttpPost("{id}/UpdateResult")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateResult([FromServices] ResultsService resultsService, Guid? id, EventResult2024 model)
         {

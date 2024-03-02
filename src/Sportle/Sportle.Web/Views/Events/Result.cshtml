@@ -3,6 +3,16 @@
 @{
     ViewData["Title"] = "Edit";
     var hasSprint = Model.Event.Sessions.Any(s => s.Type == SessionType.Sprint);
+    var hasCompare = Model.CompareUser is not null;
+
+    var cssClass = (Guid? result, Guid? prediction, bool top10 = false) =>
+    {
+        return result.HasValue && prediction.HasValue && result.Value == prediction.Value
+            ? "exact"
+            : top10 && Model.IsInTop10(prediction)
+                ? "correct"
+                : "incorrect";
+    };
 }
 
 <div class="text-center">
@@ -22,6 +32,8 @@
                     <th scope="col">Result</th>
                     <th scope="col">Prediction</th>
                     <th scope="col">Points</th>
+                    <th scope="col" condition="hasCompare">@Model.CompareUser?.UserName</th>
+                    <th scope="col" condition="hasCompare">Points</th>
                 </tr>
             </thead>
             <tbody>
@@ -29,121 +41,161 @@
                     <th scope="row" class="text-start"><span>Early Bonus</span></th>
                     <td></td>
                     <td></td>
-                    <td>@Model.Prediction?.EarlyBonus</td>
+                    <td>@Model.OwnPrediction?.EarlyBonus</td>
+                    <td condition="hasCompare"></td>
+                    <td condition="hasCompare">@Model.ComparePrediction?.EarlyBonus</td>
                 </tr>
                 <tr condition="hasSprint">
                     <th scope="row" class="text-start"><span>Sprint Pole</span></th>
                     <td>@Model.GetDriverName(Model.Result.SprintPP)</td>
-                    <td>@Model.GetDriverName(Model.Prediction?.SprintPP)</td>
-                    <td>@(Model.Result.SprintPP == Model.Prediction?.SprintPP ? 1 : 0)</td>
+                    <td class ="@cssClass(Model.Result.SprintPP, Model.OwnPrediction?.SprintPP)">@Model.GetDriverName(Model.OwnPrediction?.SprintPP)</td>
+                    <td>@(Model.Result.SprintPP == Model.OwnPrediction?.SprintPP ? 1 : 0)</td>
+                    <td condition="hasCompare" class="@cssClass(Model.Result.SprintPP, Model.ComparePrediction?.SprintPP)">@Model.GetDriverName(Model.ComparePrediction?.SprintPP)</td>
+                    <td condition="hasCompare">@(Model.Result.SprintPP == Model.ComparePrediction?.SprintPP ? 1 : 0)</td>
                 </tr>
                 <tr condition="hasSprint">
                     <th scope="row" class="text-start"><span>Sprint P1</span></th>
                     <td>@Model.GetDriverName(Model.Result.SprintP1)</td>
-                    <td>@Model.GetDriverName(Model.Prediction?.SprintP1)</td>
-                    <td>@(Model.Result.SprintP1 == Model.Prediction?.SprintP1 ? 1 : 0)</td>
+                    <td class="@cssClass(Model.Result.SprintP1, Model.OwnPrediction?.SprintP1)">@Model.GetDriverName(Model.OwnPrediction?.SprintP1)</td>
+                    <td>@(Model.Result.SprintP1 == Model.OwnPrediction?.SprintP1 ? 1 : 0)</td>
+                    <td condition="hasCompare" class="@cssClass(Model.Result.SprintP1, Model.ComparePrediction?.SprintP1)">@Model.GetDriverName(Model.ComparePrediction?.SprintP1)</td>
+                    <td condition="hasCompare">@(Model.Result.SprintP1 == Model.ComparePrediction?.SprintP1 ? 1 : 0)</td>
                 </tr>
                 <tr condition="hasSprint">
                     <th scope="row" class="text-start"><span>Sprint Fastest Lap</span></th>
                     <td>@Model.GetDriverName(Model.Result.SprintFL)</td>
-                    <td>@Model.GetDriverName(Model.Prediction?.SprintFL)</td>
-                    <td>@(Model.Result.SprintFL == Model.Prediction?.SprintFL ? 1 : 0)</td>
+                    <td class="@cssClass(Model.Result.SprintFL, Model.OwnPrediction?.SprintFL)">@Model.GetDriverName(Model.OwnPrediction?.SprintFL)</td>
+                    <td>@(Model.Result.SprintFL == Model.OwnPrediction?.SprintFL ? 1 : 0)</td>
+                    <td condition="hasCompare" class="@cssClass(Model.Result.SprintFL, Model.ComparePrediction?.SprintFL)">@Model.GetDriverName(Model.ComparePrediction?.SprintFL)</td>
+                    <td condition="hasCompare">@(Model.Result.SprintFL == Model.ComparePrediction?.SprintFL ? 1 : 0)</td>
                 </tr>
                 <tr condition="hasSprint">
                     <th scope="row" class="text-start"><span>Sprint Bonus</span></th>
                     <td></td>
                     <td></td>
-                    <td>@Model.Prediction?.SprintBonus</td>
+                    <td>@Model.OwnPrediction?.SprintBonus</td>
+                    <td condition="hasCompare"></td>
+                    <td condition="hasCompare">@Model.ComparePrediction?.SprintBonus</td>
                 </tr>
                 <tr>
                     <th scope="row" class="text-start"><span>Race Pole</span></th>
                     <td>@Model.GetDriverName(Model.Result.RacePP)</td>
-                    <td>@Model.GetDriverName(Model.Prediction?.RacePP)</td>
-                    <td>@(Model.Result.RacePP == Model.Prediction?.RacePP ? 1 : 0)</td>
+                    <td class="@cssClass(Model.Result.RacePP, Model.OwnPrediction?.RacePP)">@Model.GetDriverName(Model.OwnPrediction?.RacePP)</td>
+                    <td>@(Model.Result.RacePP == Model.OwnPrediction?.RacePP ? 1 : 0)</td>
+                    <td condition="hasCompare" class="@cssClass(Model.Result.RacePP, Model.ComparePrediction?.RacePP)">@Model.GetDriverName(Model.ComparePrediction?.RacePP)</td>
+                    <td condition="hasCompare">@(Model.Result.RacePP == Model.ComparePrediction?.RacePP ? 1 : 0)</td>
                 </tr>
                 <tr>
                     <th scope="row" class="text-start"><span>Race P1</span></th>
                     <td>@Model.GetDriverName(Model.Result.RaceP1)</td>
-                    <td>@Model.GetDriverName(Model.Prediction?.RaceP1)</td>
-                    <td>@(Model.IsInTop10(Model.Prediction?.RaceP1) ? 1 : 0)</td>
+                    <td class="@cssClass(Model.Result.RaceP1, Model.OwnPrediction?.RaceP1, true)">@Model.GetDriverName(Model.OwnPrediction?.RaceP1)</td>
+                    <td>@(Model.IsInTop10(Model.OwnPrediction?.RaceP1) ? 1 : 0)</td>
+                    <td condition="hasCompare" class="@cssClass(Model.Result.RaceP1, Model.ComparePrediction?.RaceP1, true)">@Model.GetDriverName(Model.ComparePrediction?.RaceP1)</td>
+                    <td condition="hasCompare">@(Model.IsInTop10(Model.ComparePrediction?.RaceP1) ? 1 : 0)</td>
                 </tr>
                 <tr>
                     <th scope="row" class="text-start"><span>Race P2</span></th>
                     <td>@Model.GetDriverName(Model.Result.RaceP2)</td>
-                    <td>@Model.GetDriverName(Model.Prediction?.RaceP2)</td>
-                    <td>@(Model.IsInTop10(Model.Prediction?.RaceP2) ? 1 : 0)</td>
+                    <td class="@cssClass(Model.Result.RaceP2, Model.OwnPrediction?.RaceP2, true)">@Model.GetDriverName(Model.OwnPrediction?.RaceP2)</td>
+                    <td>@(Model.IsInTop10(Model.OwnPrediction?.RaceP2) ? 1 : 0)</td>
+                    <td condition="hasCompare" class="@cssClass(Model.Result.RaceP2, Model.ComparePrediction?.RaceP2, true)">@Model.GetDriverName(Model.ComparePrediction?.RaceP2)</td>
+                    <td condition="hasCompare">@(Model.IsInTop10(Model.ComparePrediction?.RaceP2) ? 1 : 0)</td>
                 </tr>
                 <tr>
                     <th scope="row" class="text-start"><span>Race P3</span></th>
                     <td>@Model.GetDriverName(Model.Result.RaceP3)</td>
-                    <td>@Model.GetDriverName(Model.Prediction?.RaceP3)</td>
-                    <td>@(Model.IsInTop10(Model.Prediction?.RaceP3) ? 1 : 0)</td>
+                    <td class="@cssClass(Model.Result.RaceP3, Model.OwnPrediction?.RaceP3, true)">@Model.GetDriverName(Model.OwnPrediction?.RaceP3)</td>
+                    <td>@(Model.IsInTop10(Model.OwnPrediction?.RaceP3) ? 1 : 0)</td>
+                    <td condition="hasCompare" class="@cssClass(Model.Result.RaceP3, Model.ComparePrediction?.RaceP3, true)">@Model.GetDriverName(Model.ComparePrediction?.RaceP3)</td>
+                    <td condition="hasCompare">@(Model.IsInTop10(Model.ComparePrediction?.RaceP3) ? 1 : 0)</td>
                 </tr>
                 <tr>
                     <th scope="row" class="text-start"><span>Podium Bonus</span></th>
                     <td></td>
                     <td></td>
-                    <td>@Model.Prediction?.PodiumBonus</td>
+                    <td>@Model.OwnPrediction?.PodiumBonus</td>
+                    <td condition="hasCompare"></td>
+                    <td condition="hasCompare">@Model.ComparePrediction?.PodiumBonus</td>
                 </tr>
                 <tr>
                     <th scope="row" class="text-start"><span>Race P4</span></th>
                     <td>@Model.GetDriverName(Model.Result.RaceP4)</td>
-                    <td>@Model.GetDriverName(Model.Prediction?.RaceP4)</td>
-                    <td>@(Model.IsInTop10(Model.Prediction?.RaceP4) ? 1 : 0)</td>
+                    <td class="@cssClass(Model.Result.RaceP4, Model.OwnPrediction?.RaceP4, true)">@Model.GetDriverName(Model.OwnPrediction?.RaceP4)</td>
+                    <td>@(Model.IsInTop10(Model.OwnPrediction?.RaceP4) ? 1 : 0)</td>
+                    <td condition="hasCompare" class="@cssClass(Model.Result.RaceP4, Model.ComparePrediction?.RaceP4, true)">@Model.GetDriverName(Model.ComparePrediction?.RaceP4)</td>
+                    <td condition="hasCompare">@(Model.IsInTop10(Model.ComparePrediction?.RaceP4) ? 1 : 0)</td>
                 </tr>
                 <tr>
                     <th scope="row" class="text-start"><span>Race P5</span></th>
                     <td>@Model.GetDriverName(Model.Result.RaceP5)</td>
-                    <td>@Model.GetDriverName(Model.Prediction?.RaceP5)</td>
-                    <td>@(Model.IsInTop10(Model.Prediction?.RaceP5) ? 1 : 0)</td>
+                    <td class="@cssClass(Model.Result.RaceP5, Model.OwnPrediction?.RaceP5, true)">@Model.GetDriverName(Model.OwnPrediction?.RaceP5)</td>
+                    <td>@(Model.IsInTop10(Model.OwnPrediction?.RaceP5) ? 1 : 0)</td>
+                    <td condition="hasCompare" class="@cssClass(Model.Result.RaceP5, Model.ComparePrediction?.RaceP5), true">@Model.GetDriverName(Model.ComparePrediction?.RaceP5)</td>
+                    <td condition="hasCompare">@(Model.IsInTop10(Model.ComparePrediction?.RaceP5) ? 1 : 0)</td>
                 </tr>
                 <tr>
                     <th scope="row" class="text-start"><span>Race P6</span></th>
                     <td>@Model.GetDriverName(Model.Result.RaceP6)</td>
-                    <td>@Model.GetDriverName(Model.Prediction?.RaceP6)</td>
-                    <td>@(Model.IsInTop10(Model.Prediction?.RaceP6) ? 1 : 0)</td>
+                    <td class="@cssClass(Model.Result.RaceP6, Model.OwnPrediction?.RaceP6, true)">@Model.GetDriverName(Model.OwnPrediction?.RaceP6)</td>
+                    <td>@(Model.IsInTop10(Model.OwnPrediction?.RaceP6) ? 1 : 0)</td>
+                    <td condition="hasCompare" class="@cssClass(Model.Result.RaceP6, Model.ComparePrediction?.RaceP6, true)">@Model.GetDriverName(Model.ComparePrediction?.RaceP6)</td>
+                    <td condition="hasCompare">@(Model.IsInTop10(Model.ComparePrediction?.RaceP6) ? 1 : 0)</td>
                 </tr>
                 <tr>
                     <th scope="row" class="text-start"><span>Race P7</span></th>
                     <td>@Model.GetDriverName(Model.Result.RaceP7)</td>
-                    <td>@Model.GetDriverName(Model.Prediction?.RaceP7)</td>
-                    <td>@(Model.IsInTop10(Model.Prediction?.RaceP7) ? 1 : 0)</td>
+                    <td class="@cssClass(Model.Result.RaceP7, Model.OwnPrediction?.RaceP7, true)">@Model.GetDriverName(Model.OwnPrediction?.RaceP7)</td>
+                    <td>@(Model.IsInTop10(Model.OwnPrediction?.RaceP7) ? 1 : 0)</td>
+                    <td condition="hasCompare" class="@cssClass(Model.Result.RaceP7, Model.ComparePrediction?.RaceP7, true)">@Model.GetDriverName(Model.ComparePrediction?.RaceP7)</td>
+                    <td condition="hasCompare">@(Model.IsInTop10(Model.ComparePrediction?.RaceP7) ? 1 : 0)</td>
                 </tr>
                 <tr>
                     <th scope="row" class="text-start"><span>Race P8</span></th>
                     <td>@Model.GetDriverName(Model.Result.RaceP8)</td>
-                    <td>@Model.GetDriverName(Model.Prediction?.RaceP8)</td>
-                    <td>@(Model.IsInTop10(Model.Prediction?.RaceP8) ? 1 : 0)</td>
+                    <td class="@cssClass(Model.Result.RaceP8, Model.OwnPrediction?.RaceP8, true)">@Model.GetDriverName(Model.OwnPrediction?.RaceP8)</td>
+                    <td>@(Model.IsInTop10(Model.OwnPrediction?.RaceP8) ? 1 : 0)</td>
+                    <td condition="hasCompare" class="@cssClass(Model.Result.RaceP8, Model.ComparePrediction?.RaceP8, true)">@Model.GetDriverName(Model.ComparePrediction?.RaceP8)</td>
+                    <td condition="hasCompare">@(Model.IsInTop10(Model.ComparePrediction?.RaceP8) ? 1 : 0)</td>
                 </tr>
                 <tr>
                     <th scope="row" class="text-start"><span>Race P9</span></th>
                     <td>@Model.GetDriverName(Model.Result.RaceP9)</td>
-                    <td>@Model.GetDriverName(Model.Prediction?.RaceP9)</td>
-                    <td>@(Model.IsInTop10(Model.Prediction?.RaceP9) ? 1 : 0)</td>
+                    <td class="@cssClass(Model.Result.RaceP9, Model.OwnPrediction?.RaceP9, true)">@Model.GetDriverName(Model.OwnPrediction?.RaceP9)</td>
+                    <td>@(Model.IsInTop10(Model.OwnPrediction?.RaceP9) ? 1 : 0)</td>
+                    <td condition="hasCompare" class="@cssClass(Model.Result.RaceP9, Model.ComparePrediction?.RaceP9, true)">@Model.GetDriverName(Model.ComparePrediction?.RaceP9)</td>
+                    <td condition="hasCompare">@(Model.IsInTop10(Model.ComparePrediction?.RaceP9) ? 1 : 0)</td>
                 </tr>
                 <tr>
                     <th scope="row" class="text-start"><span>Race P10</span></th>
                     <td>@Model.GetDriverName(Model.Result.RaceP10)</td>
-                    <td>@Model.GetDriverName(Model.Prediction?.RaceP10)</td>
-                    <td>@(Model.IsInTop10(Model.Prediction?.RaceP10) ? 1 : 0)</td>
+                    <td class="@cssClass(Model.Result.RaceP10, Model.OwnPrediction?.RaceP10, true)">@Model.GetDriverName(Model.OwnPrediction?.RaceP10)</td>
+                    <td>@(Model.IsInTop10(Model.OwnPrediction?.RaceP10) ? 1 : 0)</td>
+                    <td condition="hasCompare" class="@cssClass(Model.Result.RaceP10, Model.ComparePrediction?.RaceP10, true)">@Model.GetDriverName(Model.ComparePrediction?.RaceP10)</td>
+                    <td condition="hasCompare">@(Model.IsInTop10(Model.ComparePrediction?.RaceP10) ? 1 : 0)</td>
                 </tr>
                 <tr>
                     <th scope="row" class="text-start"><span>Position Bonus</span></th>
                     <td></td>
                     <td></td>
-                    <td>@Model.Prediction?.PositionBonus</td>
+                    <td>@Model.OwnPrediction?.PositionBonus</td>
+                    <td condition="hasCompare"></td>
+                    <td condition="hasCompare">@Model.ComparePrediction?.PositionBonus</td>
                 </tr>
                 <tr>
                     <th scope="row" class="text-start"><span>Race Fastest Lap</span></th>
                     <td>@Model.GetDriverName(Model.Result.RaceFL)</td>
-                    <td>@Model.GetDriverName(Model.Prediction?.RaceFL)</td>
-                    <td>@(Model.Result.RaceFL == Model.Prediction?.RaceFL ? 1 : 0)</td>
+                    <td class="@cssClass(Model.Result.RaceFL, Model.OwnPrediction?.RaceFL)">@Model.GetDriverName(Model.OwnPrediction?.RaceFL)</td>
+                    <td>@(Model.Result.RaceFL == Model.OwnPrediction?.RaceFL ? 1 : 0)</td>
+                    <td condition="hasCompare" class="@cssClass(Model.Result.RaceFL, Model.ComparePrediction?.RaceFL)">@Model.GetDriverName(Model.ComparePrediction?.RaceFL)</td>
+                    <td condition="hasCompare">@(Model.Result.RaceFL == Model.ComparePrediction?.RaceFL ? 1 : 0)</td>
                 </tr>
                 <tr>
                     <th scope="row" class="text-start"><span>Total</span></th>
                     <td></td>
                     <td></td>
-                    <td>@Model.Prediction.GetTotalPoints()</td>
+                    <td>@Model.OwnPrediction.GetTotalPoints()</td>
+                    <td condition="hasCompare"></td>
+                    <td condition="hasCompare">@Model.ComparePrediction.GetTotalPoints()</td>
                 </tr>
             </tbody>
         </table>

@@ -33,3 +33,15 @@ a {
 .input-validation-error {
     border-color: #ff0000;
 }
+
+.exact {
+    color: var(--bs-success-text-emphasis);
+}
+
+.correct {
+    color: var(--bs-warning-text-emphasis);
+}
+
+.incorrect {
+    color: var(--bs-danger-text-emphasis);
+}

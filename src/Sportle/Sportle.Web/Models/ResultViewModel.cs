@@ -1,4 +1,5 @@
-﻿using Sportle.Web.Models.Formula1;
+﻿using Microsoft.AspNetCore.Identity;
+using Sportle.Web.Models.Formula1;
 
 namespace Sportle.Web.Models
 {
@@ -8,7 +9,11 @@ namespace Sportle.Web.Models
 
         public required EventResult2024 Result { get; set; }
 
-        public EventPrediction2024? Prediction { get; set; }
+        public EventPrediction2024? OwnPrediction { get; set; }
+
+        public IdentityUser? CompareUser { get; set; }
+
+        public EventPrediction2024? ComparePrediction { get; set; }
 
         public Dictionary<Guid, string> Drivers { get; set; } = [];
 

@@ -19,7 +19,7 @@ namespace Sportle.Web.Controllers
         public IActionResult Leaderboard()
         {
             var events = _context.Seasons.FirstOrDefault(s => s.Year == 2024)?.Events.Select(e => e.Id).ToList() ?? [];
-            var userScores = _context.Users.Select(u => new UserScore { User = u, Score = GetUserScore(_context, u, events) }).OrderByDescending(s => s.Score).ToList();
+            var userScores = _context.Users.ToList().Select(u => new UserScore { User = u, Score = GetUserScore(_context, u, events) }).OrderByDescending(s => s.Score).ToList();
 
             return View(userScores);
         }

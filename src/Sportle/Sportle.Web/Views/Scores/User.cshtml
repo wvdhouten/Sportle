@@ -16,7 +16,8 @@
             var isInPast = e.Sessions.First(s => s.Type == SessionType.Race).Start < now;
             var prediction = Model.Predictions.FirstOrDefault(p => p.EventId == e.Id);
             <li class="list-group-item d-flex justify-content-between align-items-center">
-                <span class="venue">@e?.Venue.Name (@e?.Venue.Country), @e?.GetDateRange()</span>
+                <a condition="isInPast" class="venue" asp-controller="Events" asp-action="Result" asp-route-id="@e?.Id" asp-route-userId="@Model.User.Id">@e?.Venue.Name (@e?.Venue.Country), @e?.GetDateRange()</a>
+                <span condition="!isInPast" class="venue">@e?.Venue.Name (@e?.Venue.Country), @e?.GetDateRange()</span>
                 <span class="score">
                     <span condition="prediction is null">⚠️</span>
                     <span condition="prediction is not null && !isInPast">✅</span>
