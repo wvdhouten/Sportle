@@ -130,7 +130,7 @@
                     <td>@Model.GetDriverName(Model.Result.RaceP5)</td>
                     <td class="@cssClass(Model.Result.RaceP5, Model.OwnPrediction?.RaceP5, true)">@Model.GetDriverName(Model.OwnPrediction?.RaceP5)</td>
                     <td>@(Model.IsInTop10(Model.OwnPrediction?.RaceP5) ? 1 : 0)</td>
-                    <td condition="hasCompare" class="@cssClass(Model.Result.RaceP5, Model.ComparePrediction?.RaceP5), true">@Model.GetDriverName(Model.ComparePrediction?.RaceP5)</td>
+                    <td condition="hasCompare" class="@cssClass(Model.Result.RaceP5, Model.ComparePrediction?.RaceP5, true)">@Model.GetDriverName(Model.ComparePrediction?.RaceP5)</td>
                     <td condition="hasCompare">@(Model.IsInTop10(Model.ComparePrediction?.RaceP5) ? 1 : 0)</td>
                 </tr>
                 <tr>

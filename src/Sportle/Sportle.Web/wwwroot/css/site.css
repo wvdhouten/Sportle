@@ -35,13 +35,13 @@ a {
 }
 
 .exact {
-    color: var(--bs-success-text-emphasis);
+    color: var(--bs-success-text-emphasis) !important;
 }
 
 .correct {
-    color: var(--bs-warning-text-emphasis);
+    color: var(--bs-warning-text-emphasis) !important;
 }
 
 .incorrect {
-    color: var(--bs-danger-text-emphasis);
+    color: var(--bs-danger-text-emphasis) !important;
 }
