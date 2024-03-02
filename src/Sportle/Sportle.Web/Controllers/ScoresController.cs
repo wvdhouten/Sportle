@@ -19,7 +19,7 @@ namespace Sportle.Web.Controllers
         public IActionResult Leaderboard()
         {
             var events = _context.Seasons.FirstOrDefault(s => s.Year == 2024)?.Events.Select(e => e.Id).ToList() ?? [];
-            var userScores = _context.Users.Select(u => new UserScore { User = u, Score = GetUserScore(_context, u, events) }).ToList();
+            var userScores = _context.Users.Select(u => new UserScore { User = u, Score = GetUserScore(_context, u, events) }).OrderByDescending(s => s.Score).ToList();
 
             return View(userScores);
         }
@@ -32,11 +32,14 @@ namespace Sportle.Web.Controllers
                 return NotFound();
             }
 
-            var model = new UserScoreViewModel { User = user };
+            var model = new UserScoreViewModel
+            {
+                User = user,
+                Events = _context.Seasons.FirstOrDefault(s => s.Year == 2024)?.Events.OrderBy(e => e.Sessions.First(s => s.Type == Models.Formula1.SessionType.Race).Start).ToList() ?? []
+            };
 
-            model.Events = _context.Seasons.FirstOrDefault(s => s.Year == 2024)?.Events.OrderBy(e => e.Sessions.First(s => s.Type == Models.Formula1.SessionType.Race).Start).ToList() ?? [];
             var eventIds = model.Events.Select(e => e.Id);
-            model.Predictions = _context.Predictions2024.Where(p => eventIds.Contains(p.EventId)).ToList() ?? [];
+            model.Predictions = _context.Predictions2024.Where(p => eventIds.Contains(p.EventId) && p.UserId == id).ToList() ?? [];
 
             return View(model);
         }

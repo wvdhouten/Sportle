@@ -105,7 +105,7 @@ namespace Sportle.Web.Controllers
                 return NotFound();
 
             var events = _context.Seasons.FirstOrDefault(s => s.Year == 2024)?.Events.Select(e => e.Id).ToList() ?? [];
-            var userScores = league.Users.Select(u => new UserScore { User = u, Score = GetUserScore(_context, u, events) }).ToList();
+            var userScores = league.Users.Select(u => new UserScore { User = u, Score = GetUserScore(_context, u, events) }).OrderByDescending(s => s.Score).ToList();
             var model = new LeagueDetailsViewModel { League = league, Users = userScores };
 
             return View(model);
