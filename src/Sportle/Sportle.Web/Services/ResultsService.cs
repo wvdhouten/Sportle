@@ -46,6 +46,7 @@ namespace Sportle.Web.Services
             ResetPoints(prediction);
             DetermineEarlyBonus(prediction, firstSession);
             DetermineSprintPoints(prediction, result);
+            DeterminePodiumBonus(prediction, top3);
             DetermineTop10Points(prediction,
                 top3,
                 rest10,
@@ -98,6 +99,14 @@ namespace Sportle.Web.Services
 
             if (hasBonus)
                 prediction.SprintBonus = 2;
+        }
+
+        private void DeterminePodiumBonus(EventPrediction2024 prediction, List<Guid> top3)
+        {
+            if (prediction.RaceP1.HasValue && top3.Contains(prediction.RaceP1.Value)
+                && prediction.RaceP2.HasValue && top3.Contains(prediction.RaceP2.Value)
+                && prediction.RaceP3.HasValue && top3.Contains(prediction.RaceP3.Value))
+                prediction.PodiumBonus = 2;
         }
 
         private void DetermineTop10Points(EventPrediction2024 prediction, List<Guid> top3, List<Guid> rest10, params Guid?[] top10)
