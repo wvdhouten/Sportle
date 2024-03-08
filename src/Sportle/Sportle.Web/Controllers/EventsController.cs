@@ -24,7 +24,6 @@ namespace Sportle.Web.Controllers
         {
             var now = DateTime.UtcNow;
             var events = _context.Seasons.First(s => s.Year == 2024).Events
-                //.OrderByDescending(e => e.Sessions.First(s => s.Type == SessionType.Race).Start > now)
                 .OrderBy(e => e.Sessions.First(s => s.Type == SessionType.Race).Start)
                 .ToList();
 
@@ -114,7 +113,7 @@ namespace Sportle.Web.Controllers
             return View(model);
         }
 
-        [HttpGet("{id}/Result")]
+        [HttpGet("{id}/Result/{userId?}")]
         public async Task<IActionResult> Result(Guid? id, Guid? userId)
         {
             if (id is null)
@@ -131,7 +130,7 @@ namespace Sportle.Web.Controllers
             _ = User.HasId(out var currentUserId);
             var ownPrediction = await _context.Predictions2024.FirstOrDefaultAsync(p => p.EventId == id && p.UserId == currentUserId);
 
-            var compareUser = (userId is not null) ? await _context.Users.FirstOrDefaultAsync(p => p.Id == userId.ToString()) : null;
+            var compareUser = (userId is not null && userId != currentUserId) ? await _context.Users.FirstOrDefaultAsync(p => p.Id == userId.ToString()) : null;
             var comparePrediction = (userId is not null) ? await _context.Predictions2024.FirstOrDefaultAsync(p => p.EventId == id && p.UserId == userId) : null;
 
             var drivers = _context.Drivers.OrderBy(d => d.Team).ToList();

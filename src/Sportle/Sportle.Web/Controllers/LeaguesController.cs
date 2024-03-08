@@ -11,6 +11,7 @@ using Sportle.Web.Services;
 namespace Sportle.Web.Controllers
 {
     [Authorize]
+    [Route("Leagues")]
     public class LeaguesController : SportleBaseController
     {
         private readonly SportleDbContext _context;
@@ -22,6 +23,7 @@ namespace Sportle.Web.Controllers
             _logger = logger;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             _ = User.HasId(out var userId);
@@ -31,12 +33,13 @@ namespace Sportle.Web.Controllers
             return View(model);
         }
 
+        [HttpGet("Create")]
         public IActionResult Create()
         {
             return View();
         }
 
-        [HttpPost]
+        [HttpPost("Create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name")] League league, [FromServices] StringService stringService)
         {
@@ -64,6 +67,7 @@ namespace Sportle.Web.Controllers
             return View(league);
         }
 
+        [HttpGet("Join/{code?}")]
         public IActionResult Join(string? code)
         {
             var league = _context.Leagues.FirstOrDefault(l => l.Code == code);
@@ -71,10 +75,9 @@ namespace Sportle.Web.Controllers
             return View(league);
         }
 
-        [HttpPost]
-        [ActionName(nameof(Join))]
+        [HttpPost("Join/{code}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ExecuteJoin(string? code)
+        public async Task<IActionResult> ExecuteJoin(string code)
         {
             _ = User.HasId(out var userId);
             var league = _context.Leagues.FirstOrDefault(l => l.Code == code);
@@ -98,6 +101,7 @@ namespace Sportle.Web.Controllers
             return View(league);
         }
 
+        [HttpGet("{id}/Details")]
         public IActionResult Details(Guid id)
         {
             var league = _context.Leagues.FirstOrDefault(l => l.Id == id);
@@ -107,31 +111,6 @@ namespace Sportle.Web.Controllers
             var events = _context.Seasons.FirstOrDefault(s => s.Year == 2024)?.Events.Select(e => e.Id).ToList() ?? [];
             var userScores = league.Users.Select(u => new UserScore { User = u, Score = GetUserScore(_context, u, events) }).OrderByDescending(s => s.Score).ToList();
             var model = new LeagueDetailsViewModel { League = league, Users = userScores };
-
-            return View(model);
-        }
-
-        public IActionResult Events(Guid id)
-        {
-            var league = _context.Leagues.FirstOrDefault(l => l.Id == id);
-            if (league is null)
-                return NotFound();
-
-            var now = DateTime.UtcNow;
-            var events = _context.Seasons.First(s => s.Year == 2024).Events
-                .OrderByDescending(e => e.Sessions.First(s => s.Type == SessionType.Race).Start > now)
-                .ThenBy(e => e.Sessions.First(s => s.Type == SessionType.Race).Start)
-                .ToList();
-
-            _ = User.HasId(out var userId);
-            var predictions = _context.Predictions2024.Where(p => p.UserId == userId).ToList();
-
-            var model = new AllEventsViewModel
-            {
-                League = league,
-                Events = events,
-                Predictions = predictions
-            };
 
             return View(model);
         }

@@ -1,0 +1,28 @@
+﻿@model List<UserScore>
+@{
+    ViewData["Title"] = "Leaderboard";
+    var e = ViewBag.Event as Event;
+    var position = 0;
+}
+
+<div class="text-center">
+    <h1 class="display-4 mb-3">Leaderboard</h1>
+    <h4 class="mb-4">@(e != null ? $"{e.Venue.Name}, {e.Venue.Country} ({e.GetDateRange()})" : "F1 Season 2024")</h4>
+
+    <partial name="_EventsLeaderBoards" model="ViewBag.Events" />
+
+    <hr />
+
+    <ul class="list-group top narrow">
+        @foreach (var userScore in Model)
+        {
+            position++;
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span class="position">@position</span>
+                <a condition="e is null" asp-controller="Leaderboard" asp-action="User" asp-route-userId="@userScore.User.Id" class="name">@userScore.User.UserName</a>
+                <a condition="e is not null" asp-controller="Events" asp-action="Result" asp-route-id="@e?.Id" asp-route-userId="@userScore.User.Id" class="name">@userScore.User.UserName</a>
+                <span class="badge rounded-pill">@userScore.Score</span>
+            </li>
+        }
+    </ul>
+</div>

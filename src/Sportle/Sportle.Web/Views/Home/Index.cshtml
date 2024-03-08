@@ -18,8 +18,8 @@
                 <h5 class="card-title">@Model.PrevEvent?.Venue.Name (@Model.PrevEvent?.Venue.Country)</h5>
                 <p class="card-text small">@Model.PrevEvent?.GetDateRange()</p>
                 <span condition="@(Model.PrevPrediction is null)">❌ Nothing predicted ❌</span>
-                <a asp-area="" asp-controller="Events" asp-action="Result" asp-route-id="@Model.PrevEvent?.Id" class="btn btn-primary btn-sm">Results</a>
-                <a condition="@(isAdmin)" asp-area="" asp-controller="Events" asp-action="UpdateResult" asp-route-id="@Model.PrevEvent?.Id" class="btn btn-warning btn-sm">Update Results</a>
+                <a asp-area="" asp-controller="Events" asp-action="Result" asp-route-id="@Model.PrevEvent?.Id" class="btn btn-primary btn-sm">Result</a>
+                <a condition="@(isAdmin)" asp-area="" asp-controller="Events" asp-action="UpdateResult" asp-route-id="@Model.PrevEvent?.Id" class="btn btn-warning btn-sm">Update Result</a>
             </div>
         </div>
         <p condition="Model.PrevEvent is null">None.</p>

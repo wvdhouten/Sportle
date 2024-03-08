@@ -1,0 +1,14 @@
+﻿@model List<Event>
+
+<div class="card">
+    <div class="card-header"><a data-bs-toggle="collapse" href="#scoring" aria-expanded="false" aria-controls="scoring">Events</a></div>
+    <div id="scoring" class="card-body collapse">
+        <ul>
+            <li><a asp-controller="Leaderboard" asp-action="Index">F1 2024 Season</a></li>
+            @foreach (var e in Model)
+            {
+                <li><a asp-controller="Leaderboard" asp-action="Index" asp-route-eventId="@e.Id">@e.Venue.Name, @e.Venue.Country</a> (@e.GetDateRange())</li>
+            }
+        </ul>
+    </div>
+</div>
