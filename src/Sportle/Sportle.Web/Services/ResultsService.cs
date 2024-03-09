@@ -75,7 +75,7 @@ namespace Sportle.Web.Services
         private static void DetermineEarlyBonus(EventPrediction2024 prediction, DateTime firstSession)
         {
             if (prediction.PredictedOn < firstSession)
-                prediction.EarlyBonus = 3;
+                prediction.EarlyBonus = 2;
         }
 
         private static void DetermineSprintPoints(EventPrediction2024 prediction, EventResult2024 result)
