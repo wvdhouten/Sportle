@@ -31,7 +31,7 @@ namespace Sportle.Web.Controllers
 
                 PrevEvent = _context.Seasons.First(s => s.Year == 2024).Events
                 .Where(e => e.Sessions.First(s => s.Type == SessionType.Race).Start < DateTime.Now)
-                .OrderBy(e => e.Sessions.First(s => s.Type == SessionType.Race).Start)
+                .OrderByDescending(e => e.Sessions.First(s => s.Type == SessionType.Race).Start)
                 .FirstOrDefault()
             };
 
