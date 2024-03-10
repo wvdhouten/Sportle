@@ -17,7 +17,7 @@
             <div class="card-body">
                 <h5 class="card-title">@Model.PrevEvent?.Venue.Name (@Model.PrevEvent?.Venue.Country)</h5>
                 <p class="card-text small">@Model.PrevEvent?.GetDateRange()</p>
-                <span condition="@(Model.PrevPrediction is null)">❌ Nothing predicted ❌</span>
+                <p condition="@(Model.PrevPrediction is null)">❌ Nothing predicted ❌</p>
                 <a asp-area="" asp-controller="Events" asp-action="Result" asp-route-id="@Model.PrevEvent?.Id" class="btn btn-primary btn-sm">Result</a>
                 <a condition="@(isAdmin)" asp-area="" asp-controller="Events" asp-action="UpdateResult" asp-route-id="@Model.PrevEvent?.Id" class="btn btn-warning btn-sm">Update Result</a>
             </div>
@@ -35,6 +35,7 @@
                 <p condition="@(Model.NextPrediction is null)">⚠️ Not yet predicted ⚠️</p>
                 <p condition="@(Model.NextPrediction is not null)">✅ Prediction submitted ✅</p>
                 <a asp-area="" asp-controller="Events" asp-action="Prediction" asp-route-id="@Model.NextEvent?.Id" class="btn btn-primary btn-sm">Predict</a>
+                <a condition="@(isAdmin)" asp-area="" asp-controller="Home" asp-action="SendReminders" class="btn btn-warning btn-sm">Send Reminders</a>
             </div>
         </div>
         <p condition="Model.NextEvent is null">None.</p>

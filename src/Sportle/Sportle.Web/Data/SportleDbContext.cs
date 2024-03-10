@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Sportle.Web.Extensions;
 using Sportle.Web.Models.Formula1;
 
 namespace Sportle.Web.Data
@@ -16,7 +17,7 @@ namespace Sportle.Web.Data
             base.OnModelCreating(builder);
 
             builder.Entity<Season>().Navigation(s => s.Drivers).AutoInclude();
-            
+
             builder.Entity<Season>().Navigation(s => s.Events).AutoInclude();
             builder.Entity<Event>().Navigation(s => s.Venue).AutoInclude();
             builder.Entity<Event>().Navigation(s => s.Sessions).AutoInclude();
@@ -51,6 +52,7 @@ namespace Sportle.Web.Data
 
                 SeedSeasonDrivers();
                 SeedEvents();
+                FixEvents();
 
                 SaveChanges();
             }
@@ -289,7 +291,7 @@ namespace Sportle.Web.Data
                         @event.Sessions.Add(new Session { Type = SessionType.FreePractice2, Start = GetDateTimeWithOffset(2024, 10, 25, 16, 00, +6) });
                         @event.Sessions.Add(new Session { Type = SessionType.FreePractice3, Start = GetDateTimeWithOffset(2024, 10, 26, 11, 30, +6) });
                         @event.Sessions.Add(new Session { Type = SessionType.Qualification, Start = GetDateTimeWithOffset(2024, 10, 26, 15, 00, +6) });
-                        @event.Sessions.Add(new Session { Type = SessionType.Race, Start = GetDateTimeWithOffset    (2024, 10, 27, 14, 00, +6) });
+                        @event.Sessions.Add(new Session { Type = SessionType.Race, Start = GetDateTimeWithOffset(2024, 10, 27, 14, 00, +6) });
                         break;
                     case "Interlagos, São Paulo":
                         //@event.Sessions.Add(new Session { Type = SessionType.FreePractice1, Start = new DateTime(2024, 03, 07, 16, 30, 00).WithOffset(-3) });
@@ -324,6 +326,144 @@ namespace Sportle.Web.Data
                 }
 
                 season.Events.Add(@event);
+            }
+        }
+
+        public void FixEvents()
+        {
+            var season = Seasons.FirstOrDefault(s => s.Year == 2024);
+            foreach (var @event in season?.Events ?? [])
+            {
+                var offset = 0;
+
+                switch (@event.Venue.Name)
+                {
+                    case "Sakhir":
+                        offset = +3;
+                        break;
+                    case "Jeddah":
+                        offset = +3;
+                        break;
+                    case "Albert Park, Melbourne":
+                        offset = +11;
+                        break;
+                    case "Sazuka":
+                        offset = +8;
+                        break;
+                    case "Shanghai":
+                        if (@event.Sessions.Count == 1)
+                        {
+                            @event.Sessions.Add(new Session { Type = SessionType.FreePractice1, Start = GetDateTimeWithOffset(2024, 04, 19, 11, 30, +7) });
+                            @event.Sessions.Add(new Session { Type = SessionType.Shootout, Start = GetDateTimeWithOffset(2024, 04, 19, 15, 30, +7) });
+                            @event.Sessions.Add(new Session { Type = SessionType.Sprint, Start = GetDateTimeWithOffset(2024, 04, 20, 11, 00, +7) });
+                            @event.Sessions.Add(new Session { Type = SessionType.Qualification, Start = GetDateTimeWithOffset(2024, 04, 20, 15, 00, +7) });
+                        }
+                        offset = +7;
+                        break;
+                    case "Miami":
+                        if (@event.Sessions.Count == 1)
+                        {
+                            @event.Sessions.Add(new Session { Type = SessionType.FreePractice1, Start = GetDateTimeWithOffset(2024, 05, 03, 12, 30, -5) });
+                            @event.Sessions.Add(new Session { Type = SessionType.Shootout, Start = GetDateTimeWithOffset(2024, 05, 03, 16, 30, -5) });
+                            @event.Sessions.Add(new Session { Type = SessionType.Sprint, Start = GetDateTimeWithOffset(2024, 05, 04, 12, 00, -5) });
+                            @event.Sessions.Add(new Session { Type = SessionType.Qualification, Start = GetDateTimeWithOffset(2024, 05, 04, 16, 00, -5) });
+                        }
+                        offset = -5;
+                        break;
+                    case "Imola":
+                        offset = +1;
+                        break;
+                    case "Monaco":
+                        offset = +1;
+                        break;
+                    case "Gilles Villeneuve, Montreal":
+                        offset = -5;
+                        break;
+                    case "Barcelona":
+                        offset = +1;
+                        break;
+                    case "Red Bull Ring":
+                        if (@event.Sessions.Count == 1)
+                        {
+                            @event.Sessions.Add(new Session { Type = SessionType.FreePractice1, Start = GetDateTimeWithOffset(2024, 06, 28, 12, 30, +1) });
+                            @event.Sessions.Add(new Session { Type = SessionType.Shootout, Start = GetDateTimeWithOffset(2024, 06, 28, 16, 30, -4) });
+                            @event.Sessions.Add(new Session { Type = SessionType.Sprint, Start = GetDateTimeWithOffset(2024, 06, 29, 12, 00, -4) });
+                            @event.Sessions.Add(new Session { Type = SessionType.Qualification, Start = GetDateTimeWithOffset(2024, 06, 29, 16, 00, -4) });
+                        }
+                        offset = +1;
+                        break;
+                    case "Silverstone":
+                        offset = +0;
+                        break;
+                    case "Hungaroring":
+                        offset = +1;
+                        break;
+                    case "Spa-Francorchamps":
+                        offset = +1;
+                        break;
+                    case "Zandvoort":
+                        offset = +1;
+                        break;
+                    case "Monza":
+                        offset = +1;
+                        break;
+                    case "Baku":
+                        offset = +3;
+                        break;
+                    case "Marina Bay":
+                        offset = +7;
+                        break;
+                    case "Circuit of the Americas":
+                        if (@event.Sessions.Count == 1)
+                        {
+                            @event.Sessions.Add(new Session { Type = SessionType.FreePractice1, Start = GetDateTimeWithOffset(2024, 10, 18, 12, 30, -6) });
+                            @event.Sessions.Add(new Session { Type = SessionType.Shootout, Start = GetDateTimeWithOffset(2024, 10, 18, 16, 30, -6) });
+                            @event.Sessions.Add(new Session { Type = SessionType.Sprint, Start = GetDateTimeWithOffset(2024, 10, 19, 13, 00, -6) });
+                            @event.Sessions.Add(new Session { Type = SessionType.Qualification, Start = GetDateTimeWithOffset(2024, 10, 19, 17, 00, -6) });
+                        }
+                        offset = -6;
+                        break;
+                    case "Hermanos Rodriguez":
+                        offset = -6;
+                        break;
+                    case "Interlagos, São Paulo":
+                        if (@event.Sessions.Count == 1)
+                        {
+                            @event.Sessions.Add(new Session { Type = SessionType.FreePractice1, Start = GetDateTimeWithOffset(2024, 11, 01, 11, 30, -3) });
+                            @event.Sessions.Add(new Session { Type = SessionType.Shootout, Start = GetDateTimeWithOffset(2024, 11, 01, 15, 30, -3) });
+                            @event.Sessions.Add(new Session { Type = SessionType.Sprint, Start = GetDateTimeWithOffset(2024, 11, 02, 11, 00, -3) });
+                            @event.Sessions.Add(new Session { Type = SessionType.Qualification, Start = GetDateTimeWithOffset(2024, 11, 02, 13, 00, -3) });
+                        }
+                        offset = -3;
+                        break;
+                    case "Las Vegas":
+                        if (@event.Sessions.Count == 1)
+                        {
+                            @event.Sessions.Add(new Session { Type = SessionType.FreePractice1, Start = GetDateTimeWithOffset(2024, 11, 21, 18, 30, -8) });
+                            @event.Sessions.Add(new Session { Type = SessionType.FreePractice2, Start = GetDateTimeWithOffset(2024, 11, 21, 22, 00, -8) });
+                            @event.Sessions.Add(new Session { Type = SessionType.FreePractice3, Start = GetDateTimeWithOffset(2024, 11, 22, 18, 30, -8) });
+                            @event.Sessions.Add(new Session { Type = SessionType.Qualification, Start = GetDateTimeWithOffset(2024, 11, 22, 22, 00, -8) });
+                        }
+                        offset = -8;
+                        break;
+                    case "Lusail":
+                        if (@event.Sessions.Count == 1)
+                        {
+                            @event.Sessions.Add(new Session { Type = SessionType.FreePractice1, Start = GetDateTimeWithOffset(2024, 11, 29, 16, 30, +3) });
+                            @event.Sessions.Add(new Session { Type = SessionType.Shootout, Start = GetDateTimeWithOffset(2024, 11, 29, 20, 30, +3) });
+                            @event.Sessions.Add(new Session { Type = SessionType.Sprint, Start = GetDateTimeWithOffset(2024, 11, 30, 16, 00, +3) });
+                            @event.Sessions.Add(new Session { Type = SessionType.Qualification, Start = GetDateTimeWithOffset(2024, 11, 30, 20, 00, +3) });
+                        }
+                        offset = +3;
+                        break;
+                    case "Yas Marina":
+                        offset = +4;
+                        break;
+                    default:
+                        break;
+                }
+
+                @event.Sessions.ForEach(s => s.TimeZoneOffset = offset);
             }
         }
 

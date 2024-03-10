@@ -22,7 +22,7 @@
                     <p class="card-text small">@e.GetDateRange()</p>
                     <p condition="@(!hasPrediction && !isInPast)">⚠️ Not yet predicted ⚠️</p>
                     <p condition="@(hasPrediction && !isInPast)">✅ Prediction submitted ✅</p>
-                    <span condition="@(!hasPrediction && isInPast)">❌ Nothing predicted ❌</span>
+                    <p condition="@(!hasPrediction && isInPast)">❌ Nothing predicted ❌</p>
                     <a condition="@(!isInPast)" asp-area="" asp-controller="Events" asp-action="Prediction" asp-route-id="@e.Id" class="btn btn-primary btn-sm">Predict</a>
                     <a condition="@(hasPrediction && isInPast)" asp-area="" asp-controller="Events" asp-action="Result" asp-route-id="@e.Id" class="btn btn-primary btn-sm">Result</a>
                     <a condition="@(isAdmin && isInPast)" asp-area="" asp-controller="Events" asp-action="UpdateResult" asp-route-id="@e.Id" class="btn btn-warning btn-sm">Update Result</a>

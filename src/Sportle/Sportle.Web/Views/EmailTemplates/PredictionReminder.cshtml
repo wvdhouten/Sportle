@@ -1,8 +1,6 @@
-@using System.Text.Encodings.Web
-
-@model ConfirmEmail
+﻿@model PredictionReminder
 @{
-  Layout = "_Layout.cshtml";
+    Layout = "_Layout.cshtml";
 }
 
 <table style="background-color:#ddd;width:100%;border-spacing:0;font-family:'Roboto',Arial,Helvetica,sans-serif;">
@@ -11,14 +9,28 @@
             <table style="background-color:white;border-spacing:0;">
                 <tr>
                     <td style="width:600px;background-color:#E56717;color:white;" align="center">
-                        <h1>Confirm Email</h1>
+                        <h1>Prediction reminder</h1>
                     </td>
                 </tr>
                 <tr>
                     <td style="padding:18px;">
                         <p style="margin:0;">
-                            A Sportle account has been registered with your email.
+                            Hello @Model.User?.UserName,
                         </p>
+                        <p>
+                            Here's a reminder for filling in the predictions for <strong>@Model.Event?.Venue.Name (@Model.Event?.Venue.Country)</strong>
+                        </p>
+                        <p>
+                            The deadlines are:
+                        </p>
+                        <ul>
+                            @foreach(var session in Model.Event?.Sessions ?? [])
+                            {
+                                <li>
+                                    @session.Type.ToString(): @session.FormattedStart()
+                                </li>
+                            }
+                        </ul>
                     </td>
                 </tr>
                 <tr>
@@ -26,7 +38,7 @@
                         <table style="background-color:#ff2800;width:50%;padding:20px;" align="center">
                             <tr>
                                 <td style="font-weight:bold; font-size:x-large;" align="center">
-                                    <a href="@HtmlEncoder.Default.Encode(Model.CallbackUrl)" style="color:white;text-decoration:none;">Confirm Email</a>
+                                    <a href="https://f1.justanotherproject.org/Events/@Model.Event?.Id/Predict" style="color:white;text-decoration:none;">Make picks</a>
                                 </td>
                             </tr>
                         </table>
