@@ -24,7 +24,7 @@
                             The deadlines are:
                         </p>
                         <ul>
-                            @foreach(var session in Model.Event?.Sessions ?? [])
+                            @foreach(var session in Model.Event?.Sessions.OrderBy(s => s.Start).ToList() ?? [])
                             {
                                 <li>
                                     @session.Type.ToString(): @session.FormattedStart()
